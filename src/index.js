@@ -10,6 +10,7 @@ import {
 	GeomanistRegular,
 	GeomanistMedium
 } from './assets/fonts/fonts';
+import './index.css';
 
 const theme = createMuiTheme({
 	typography: {

@@ -1,12 +1,17 @@
 import * as React from 'react';
-import { Typography } from '@material-ui/core';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
+import routes from './routes/routes';
 
 function App() {
 	return (
-		<>
-			<Typography variant={'h3'}>{'ikehgfdnkwegjy'}</Typography>
-			<p>{'wkejhgfsnkwgy'}</p>
-		</>
+		<Router>
+			<Route
+				exact
+				path={routes.maxim.path}
+				component={routes.maxim.component}
+			/>
+			{/* <Route component={routes.invalidPage.component} /> */}
+		</Router>
 	);
 }
 
