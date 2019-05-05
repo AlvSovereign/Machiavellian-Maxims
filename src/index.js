@@ -5,6 +5,7 @@ import * as serviceWorker from './serviceWorker';
 import { ThemeProvider } from '@material-ui/styles';
 import { createMuiTheme } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
+import red from '@material-ui/core/colors/red';
 import {
 	GeomanistLight,
 	GeomanistRegular,
@@ -13,14 +14,17 @@ import {
 import './index.css';
 
 const theme = createMuiTheme({
+	palette: {
+		secondary: { main: red.A700 }
+	},
 	typography: {
 		fontFamily:
-			'"Geomanist", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif'
+			'Geomanist, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif'
 	},
 	overrides: {
 		MuiCssBaseline: {
 			'@global': {
-				'@font-family': [GeomanistLight, GeomanistRegular, GeomanistMedium]
+				fontFamily: [GeomanistLight, GeomanistRegular, GeomanistMedium]
 			}
 		}
 	}

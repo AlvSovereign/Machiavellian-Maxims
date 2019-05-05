@@ -37,14 +37,30 @@ const clientApi = ({ baseUrl = '' }: ClientApiArgs) => {
 	return axiosInstance;
 };
 
+function getRandomFloat(min: number, max: number) {
+	return Math.floor(Math.random() * (max - min) + min);
+}
 const MaximApi = {
-	fetchMaxim: async ({ baseUrl }: MaximApiArgs): Promise<object> => {
+	fetchRandomMaxim: async ({ baseUrl }: MaximApiArgs): Promise<object> => {
 		try {
-			const response = await clientApi({ baseUrl }).get('data.json');
-			return response;
+			const randomNumber: number = getRandomFloat(1, 5);
+			const response: any = await clientApi({ baseUrl }).get(
+				'maxims/maxims.json'
+			);
+			const returnedMaxim = response.data.maxims.filter(
+				(maxim: string, index: number) =>
+					randomNumber === index ? maxim : null
+			);
+
+			const maxim = {
+				number: returnedMaxim[0].number,
+				text: returnedMaxim[0].text
+			};
+
+			return maxim;
 		} catch (error) {
 			console.error(error);
-			return { error };
+			return error;
 		}
 	}
 };

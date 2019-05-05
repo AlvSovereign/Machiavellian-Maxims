@@ -1,42 +1,61 @@
 import * as React from 'react';
-import ReactMarkdown from 'markdown-to-jsx';
-import { Typography } from '@material-ui/core';
+import Markdown from 'markdown-to-jsx';
+import { Typography, Link } from '@material-ui/core';
+import { makeStyles, useTheme } from '@material-ui/styles';
 
-const Markdown = (props: any) => {
+const ConvertMarkdown = (props: any) => {
+	console.log('props: ', props);
+	const theme: any = useTheme();
+	const useStyles = makeStyles({
+		root: {
+			'&:before': {
+				content: 'open-quote',
+				position: 'absolute',
+				color: theme.palette.secondary.main,
+				fontSize: '7.5em',
+				fontWeight: 700,
+				lineHeight: 0.7,
+				opacity: 0.3,
+				zIndex: -10
+			}
+		}
+	});
+	const classes = useStyles(props);
+
 	const options = {
 		overrides: {
-			h1: {
-				component: (props: any) => (
-					<Typography gutterBottom variant='h4' {...props} />
-				)
-			},
 			h2: {
 				component: (props: any) => (
-					<Typography gutterBottom variant='h6' {...props} />
+					<Typography
+						gutterBottom
+						variant={'h4'}
+						align={'right'}
+						color={'secondary'}
+						{...props}
+					/>
 				)
 			},
-			h3: {
+			p: {
+				props: {
+					className: classes.root
+				},
 				component: (props: any) => (
-					<Typography gutterBottom variant='subtitle1' {...props} />
+					<Typography gutterBottom variant={'h5'} {...props} />
 				)
 			},
-			h4: {
+			a: {
 				component: (props: any) => (
-					<Typography gutterBottom variant='caption' paragraph {...props} />
+					<Typography gutterBottom variant={'h5'} {...props}>
+						<Link href={props.href} target={'_blank'}>
+							{props.children}
+						</Link>
+					</Typography>
 				)
-			},
-			p: { component: (props: any) => <Typography paragraph {...props} /> }
-			// li: {
-			//   component: withStyles(styles)(({ classes, ...props }) => (
-			//     <li className={classes.listItem}>
-			//       <Typography component="span" {...props} />
-			//     </li>
-			//   )),
-			// },
+			}
 		}
 	};
 
-	return <ReactMarkdown options={options} {...props} />;
+	return <Markdown options={options} {...props} />;
 };
 
-export default Markdown;
+export default ConvertMarkdown;

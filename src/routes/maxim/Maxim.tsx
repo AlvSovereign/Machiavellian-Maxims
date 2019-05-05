@@ -1,21 +1,24 @@
 import * as React from 'react';
-import Axios from 'axios';
 import { Grid } from '@material-ui/core';
 import MaximApi from '../../api/client';
-import Markdown from '../../components/Markdown';
+import ConvertMarkdown from '../../components/Markdown';
 
 const Maxim = (props: IProps) => {
-	const [maxim, setMaxim] = React.useState('');
+	const [maxim, setMaxim] = React.useState();
+	console.log('maxim: ', maxim);
+
+	const fetchMaxim = async () => {
+		const response: any = await MaximApi.fetchRandomMaxim({
+			baseUrl: ''
+		});
+
+		setMaxim(response);
+	};
 
 	//fetch maxim
 	React.useEffect(() => {
-		// fetchMaxim();
-		(async () => {
-			const fetchMaximKey: any = await MaximApi.fetchMaxim({ baseUrl: '' });
-			const getMaxim = await Axios.get(`maxims/${fetchMaximKey.maxim}.md`);
-			setMaxim(getMaxim.data);
-		})();
-	}, [maxim]);
+		fetchMaxim();
+	}, []);
 
 	if (!maxim) {
 		return 'Loading';
@@ -29,7 +32,8 @@ const Maxim = (props: IProps) => {
 			justify={'center'}
 		>
 			<Grid item xs={10}>
-				<Markdown>{maxim}</Markdown>
+				<ConvertMarkdown>{maxim.number}</ConvertMarkdown>
+				<ConvertMarkdown>{maxim.text}</ConvertMarkdown>
 			</Grid>
 		</Grid>
 	);
