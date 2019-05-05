@@ -4,7 +4,6 @@ import { Typography, Link } from '@material-ui/core';
 import { makeStyles, useTheme } from '@material-ui/styles';
 
 const ConvertMarkdown = (props: any) => {
-	console.log('props: ', props);
 	const theme: any = useTheme();
 	const useStyles = makeStyles({
 		root: {
@@ -23,6 +22,7 @@ const ConvertMarkdown = (props: any) => {
 	const classes = useStyles(props);
 
 	const options = {
+		forceBlock: true,
 		overrides: {
 			h2: {
 				component: (props: any) => (

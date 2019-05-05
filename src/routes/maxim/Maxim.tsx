@@ -32,7 +32,7 @@ const Maxim = (props: IProps) => {
 			justify={'center'}
 		>
 			<Grid item xs={10}>
-				<ConvertMarkdown>{maxim.number}</ConvertMarkdown>
+				<ConvertMarkdown>{maxim.title}</ConvertMarkdown>
 				<ConvertMarkdown>{maxim.text}</ConvertMarkdown>
 			</Grid>
 		</Grid>

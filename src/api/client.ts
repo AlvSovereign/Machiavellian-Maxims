@@ -53,7 +53,7 @@ const MaximApi = {
 			);
 
 			const maxim = {
-				number: returnedMaxim[0].number,
+				title: returnedMaxim[0].title,
 				text: returnedMaxim[0].text
 			};
 
