@@ -7,6 +7,7 @@ import { createMuiTheme } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import red from '@material-ui/core/colors/red';
 import {
+	CalendasPlus,
 	GeomanistLight,
 	GeomanistRegular,
 	GeomanistMedium
@@ -19,12 +20,17 @@ const theme = createMuiTheme({
 	},
 	typography: {
 		fontFamily:
-			'Geomanist, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif'
+			'Geomanist, CalendasPlus, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif'
 	},
 	overrides: {
 		MuiCssBaseline: {
 			'@global': {
-				fontFamily: [GeomanistLight, GeomanistRegular, GeomanistMedium]
+				'@fontFamily': [
+					GeomanistLight,
+					GeomanistRegular,
+					GeomanistMedium,
+					CalendasPlus
+				]
 			}
 		}
 	}

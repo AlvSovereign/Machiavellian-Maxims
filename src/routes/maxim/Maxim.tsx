@@ -5,7 +5,6 @@ import ConvertMarkdown from '../../components/Markdown';
 
 const Maxim = (props: IProps) => {
 	const [maxim, setMaxim] = React.useState();
-	console.log('maxim: ', maxim);
 
 	const fetchMaxim = async () => {
 		const response: any = await MaximApi.fetchRandomMaxim({
@@ -31,9 +30,9 @@ const Maxim = (props: IProps) => {
 			alignItems={'center'}
 			justify={'center'}
 		>
-			<Grid item xs={10}>
+			<Grid item xs={10} md={6}>
 				<ConvertMarkdown>{maxim.title}</ConvertMarkdown>
-				<ConvertMarkdown>{maxim.text}</ConvertMarkdown>
+				<ConvertMarkdown fontStyle={'serif'}>{maxim.text}</ConvertMarkdown>
 			</Grid>
 		</Grid>
 	);

@@ -1,7 +1,17 @@
+const CalendasPlusWoff2 = './calendas_plus.woff2';
 const GeomanistLightWoff2 = './geomanist-light.woff2';
 const GeomanistRegularWoff2 = './geomanist-regular.woff2';
 const GeomanistMeduimWoff2 = './geomanist-medium.woff2';
 
+const CalendasPlus = {
+	fontFamily: 'CalendasPlus',
+	fontStyle: 'normal',
+	fontDisplay: 'swap',
+	fontWeight: 500,
+	src: `
+		url(${CalendasPlusWoff2}) format('woff2')
+	`
+};
 const GeomanistLight = {
 	fontFamily: 'Geomanist',
 	fontStyle: 'normal',
@@ -30,4 +40,4 @@ const GeomanistMedium = {
   `
 };
 
-export { GeomanistLight, GeomanistRegular, GeomanistMedium };
+export { CalendasPlus, GeomanistLight, GeomanistRegular, GeomanistMedium };

@@ -43,10 +43,12 @@ function getRandomFloat(min: number, max: number) {
 const MaximApi = {
 	fetchRandomMaxim: async ({ baseUrl }: MaximApiArgs): Promise<object> => {
 		try {
-			const randomNumber: number = getRandomFloat(1, 5);
 			const response: any = await clientApi({ baseUrl }).get(
 				'maxims/maxims.json'
 			);
+			const noOfMaxims = response.data.maxims.length;
+
+			const randomNumber: number = getRandomFloat(1, noOfMaxims);
 			const returnedMaxim = response.data.maxims.filter(
 				(maxim: string, index: number) =>
 					randomNumber === index ? maxim : null
