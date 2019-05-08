@@ -1,4 +1,4 @@
-const CalendasPlusWoff2 = './calendas_plus.woff2';
+const CalendasPlusWoff2 = 'calendas_plus.woff2';
 const GeomanistLightWoff2 = './geomanist-light.woff2';
 const GeomanistRegularWoff2 = './geomanist-regular.woff2';
 const GeomanistMeduimWoff2 = './geomanist-medium.woff2';

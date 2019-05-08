@@ -1,10 +1,12 @@
 import * as React from 'react';
 import Markdown from 'markdown-to-jsx';
 import { Typography, Link } from '@material-ui/core';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { makeStyles, useTheme } from '@material-ui/styles';
 
 const ConvertMarkdown = (props: IProps) => {
 	const theme: any = useTheme();
+	const mobile = useMediaQuery(theme.breakpoints.down('sm'));
 	const useStyles = makeStyles({
 		root: {
 			'&:before': {
@@ -13,13 +15,14 @@ const ConvertMarkdown = (props: IProps) => {
 				color: theme.palette.secondary.main,
 				fontSize: '7.5em',
 				fontWeight: 700,
-				lineHeight: 0.7,
+				lineHeight: 1,
 				opacity: 0.2,
 				zIndex: -10
 			}
 		},
 		serif: {
-			fontFamily: 'CalendasPlus, serif'
+			fontFamily: 'CalendasPlus, serif',
+			lineHeight: mobile ? 1.5 : 2
 		}
 	});
 	const classes = useStyles(props);
@@ -32,7 +35,7 @@ const ConvertMarkdown = (props: IProps) => {
 						gutterBottom
 						variant={'h4'}
 						align={'right'}
-						color={'secondary'}
+						color={'primary'}
 						{...props}
 					/>
 				)
@@ -50,7 +53,7 @@ const ConvertMarkdown = (props: IProps) => {
 					className: `${classes.root} ${classes.serif}`
 				},
 				component: (props: any) => (
-					<Typography gutterBottom variant={'h5'} {...props} />
+					<Typography gutterBottom variant={mobile ? 'h6' : 'h5'} {...props} />
 				)
 			},
 			a: {

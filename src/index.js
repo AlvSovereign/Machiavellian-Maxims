@@ -16,11 +16,11 @@ import './index.css';
 
 const theme = createMuiTheme({
 	palette: {
-		secondary: { main: red.A700 }
+		primary: { main: red.A700 }
 	},
 	typography: {
 		fontFamily:
-			'Geomanist, CalendasPlus, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif'
+			'Geomanist, "CalendasPlus", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif'
 	},
 	overrides: {
 		MuiCssBaseline: {
