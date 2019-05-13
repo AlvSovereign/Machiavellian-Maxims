@@ -1,21 +1,27 @@
 import * as React from 'react';
-import { Grid, Button, Divider } from '@material-ui/core';
-import { makeStyles } from '@material-ui/styles';
-import { KeyboardArrowLeft, KeyboardArrowRight } from '@material-ui/icons';
+import { Grid, Button, Divider, Fab } from '@material-ui/core';
+import { makeStyles, useTheme } from '@material-ui/styles';
+import { Add, KeyboardArrowLeft, KeyboardArrowRight } from '@material-ui/icons';
 import MaximApi from '../../api/client';
 import ConvertMarkdown from '../../components/Markdown';
 
-const useStyles = makeStyles({
-	root: {
-		margin: '2em 0'
-	},
-	grid: {
-		maxWidth: 720
-	}
-});
-
 const Maxim = (props: IProps) => {
 	const [maxim, setMaxim] = React.useState();
+	const theme: any = useTheme();
+	const useStyles = makeStyles({
+		root: {
+			margin: '2em 0'
+		},
+		grid: {
+			maxWidth: 720
+		},
+		fab: {
+			position: 'absolute',
+			bottom: theme.spacing.unit * 2,
+			right: theme.spacing.unit * 2,
+			margin: theme.spacing.unit
+		}
+	});
 	const classes = useStyles();
 
 	const fetchMaxim = async () => {
@@ -66,6 +72,9 @@ const Maxim = (props: IProps) => {
 					{/* </Grid> */}
 				</Grid>
 			</Grid>
+			<Fab color='primary' aria-label='Add' className={classes.fab}>
+				<Add />
+			</Fab>
 		</Grid>
 	);
 };

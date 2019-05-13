@@ -33,7 +33,7 @@ const ConvertMarkdown = (props: IProps) => {
 				component: (props: any) => (
 					<Typography
 						gutterBottom
-						variant={'h4'}
+						variant={mobile ? 'h5' : 'h4'}
 						align={'right'}
 						color={'primary'}
 						{...props}
