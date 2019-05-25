@@ -2,45 +2,28 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-import { ThemeProvider } from '@material-ui/styles';
-import { createMuiTheme } from '@material-ui/core/styles';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import red from '@material-ui/core/colors/red';
-import {
-	CalendasPlus,
-	GeomanistLight,
-	GeomanistRegular,
-	GeomanistMedium
-} from './assets/fonts/fonts';
 import './index.css';
+import AWSAppSyncClient from 'aws-appsync';
+import AppSyncConfig from './aws-exports';
+import { ApolloProvider } from 'react-apollo';
+import { Rehydrated } from 'aws-appsync-react'; // this needs to also be installed when working with React
 
-const theme = createMuiTheme({
-	palette: {
-		primary: { main: red.A700 }
-	},
-	typography: {
-		fontFamily:
-			'Geomanist, "CalendasPlus", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif'
-	},
-	overrides: {
-		MuiCssBaseline: {
-			'@global': {
-				'@fontFamily': [
-					GeomanistLight,
-					GeomanistRegular,
-					GeomanistMedium,
-					CalendasPlus
-				]
-			}
-		}
+const client = new AWSAppSyncClient({
+	url: AppSyncConfig.aws_appsync_graphqlEndpoint,
+	region: AppSyncConfig.aws_appsync_region,
+	auth: {
+		type: AppSyncConfig.aws_appsync_authenticationType,
+		apiKey: AppSyncConfig.aws_appsync_apiKey
+		// jwtToken: async () => token, // Required when you use Cognito UserPools OR OpenID Connect. token object is obtained previously
 	}
 });
 
 ReactDOM.render(
-	<ThemeProvider theme={theme}>
-		<CssBaseline />
-		<App />
-	</ThemeProvider>,
+	<ApolloProvider client={client}>
+		<Rehydrated>
+			<App />
+		</Rehydrated>
+	</ApolloProvider>,
 	document.getElementById('root')
 );
 

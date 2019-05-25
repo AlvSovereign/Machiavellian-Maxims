@@ -1,11 +1,21 @@
 import * as React from 'react';
-import { Grid, Button, Divider, Fab } from '@material-ui/core';
+import {
+	Grid,
+	Button,
+	Divider,
+	Fab,
+	CircularProgress
+} from '@material-ui/core';
 import { makeStyles, useTheme } from '@material-ui/styles';
 import { Add, KeyboardArrowLeft, KeyboardArrowRight } from '@material-ui/icons';
 import MaximApi from '../../api/client';
 import ConvertMarkdown from '../../components/Markdown';
+import { graphql } from 'react-apollo';
+import gql from 'graphql-tag';
+import { _listMaxims } from '../../graphql/queries';
+import { RouteComponentProps } from 'react-router';
 
-const Maxim = (props: IProps) => {
+const Maxim: React.FC<IProps> = props => {
 	const [maxim, setMaxim] = React.useState();
 	const theme: any = useTheme();
 	const useStyles = makeStyles({
@@ -17,29 +27,25 @@ const Maxim = (props: IProps) => {
 		},
 		fab: {
 			position: 'absolute',
-			bottom: theme.spacing.unit * 2,
-			right: theme.spacing.unit * 2,
-			margin: theme.spacing.unit
+			bottom: theme.spacing(2),
+			right: theme.spacing(2),
+			margin: theme.spacing(1)
 		}
 	});
 	const classes = useStyles();
 
-	const fetchMaxim = async () => {
-		const response: any = await MaximApi.fetchRandomMaxim({
-			baseUrl: ''
-		});
+	// const fetchMaxim = async () => {
+	// 	const response: any = await MaximApi.fetchRandomMaxim({
+	// 		baseUrl: ''
+	// 	});
 
-		setMaxim(response);
-	};
+	// 	setMaxim(response);
+	// };
 
 	//fetch maxim
 	React.useEffect(() => {
-		fetchMaxim();
+		// fetchMaxim();
 	}, []);
-
-	if (!maxim) {
-		return 'Loading';
-	}
 
 	return (
 		<Grid
@@ -50,8 +56,14 @@ const Maxim = (props: IProps) => {
 			className={classes.grid}
 		>
 			<Grid item xs={10}>
-				<ConvertMarkdown>{maxim.title}</ConvertMarkdown>
-				<ConvertMarkdown fontStyle={'serif'}>{maxim.text}</ConvertMarkdown>
+				{props.maxims.map(maxim => (
+					<>
+						<ConvertMarkdown>{maxim.name}</ConvertMarkdown>
+						<ConvertMarkdown fontStyle={'serif'}>
+							{maxim.content}
+						</ConvertMarkdown>
+					</>
+				))}
 				<Divider className={classes.root} />
 				<Grid
 					container
@@ -63,9 +75,9 @@ const Maxim = (props: IProps) => {
 					<Button>
 						<KeyboardArrowLeft />
 					</Button>
-					<Button variant={'contained'} color={'primary'} onClick={fetchMaxim}>
+					{/* <Button variant={'contained'} color={'primary'} onClick={fetchMaxim}>
 						{'Random Maxim'}
-					</Button>
+					</Button> */}
 					<Button>
 						<KeyboardArrowRight />
 					</Button>
@@ -79,6 +91,19 @@ const Maxim = (props: IProps) => {
 	);
 };
 
-export default Maxim;
+export default graphql(gql(_listMaxims), {
+	props: (props: any) => ({
+		maxims: props.data.listMaxims ? props.data.listMaxims.items : []
+	})
+})(Maxim);
 
-interface IProps {}
+interface IProps {
+	maxims: Array<Mixims>;
+}
+
+interface Mixims {
+	__typename: string;
+	id: string;
+	name: string;
+	content: string;
+}

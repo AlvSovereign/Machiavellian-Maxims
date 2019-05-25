@@ -1,0 +1,5 @@
+type Maxim @model {
+  id: ID!
+  name: String!
+  content: String
+}

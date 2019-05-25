@@ -1,0 +1,10 @@
+{
+    "AppSyncApiName": "maxims",
+    "DynamoDBBillingMode": "PAY_PER_REQUEST",
+    "AuthCognitoUserPoolId": {
+        "Fn::GetAtt": [
+            "authcognito336f073a",
+            "Outputs.UserPoolId"
+        ]
+    }
+}
