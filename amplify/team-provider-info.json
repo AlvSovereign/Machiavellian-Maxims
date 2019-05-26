@@ -1,14 +1,14 @@
 {
     "dev": {
         "awscloudformation": {
-            "AuthRoleName": "machiavellian-maxims-dev-20190516232209-authRole",
-            "UnauthRoleArn": "arn:aws:iam::348412102590:role/machiavellian-maxims-dev-20190516232209-unauthRole",
-            "AuthRoleArn": "arn:aws:iam::348412102590:role/machiavellian-maxims-dev-20190516232209-authRole",
+            "AuthRoleName": "machiavellian-maxims-dev-20190526212528-authRole",
+            "UnauthRoleArn": "arn:aws:iam::348412102590:role/machiavellian-maxims-dev-20190526212528-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::348412102590:role/machiavellian-maxims-dev-20190526212528-authRole",
             "Region": "eu-west-2",
-            "DeploymentBucketName": "machiavellian-maxims-dev-20190516232209-deployment",
-            "UnauthRoleName": "machiavellian-maxims-dev-20190516232209-unauthRole",
-            "StackName": "machiavellian-maxims-dev-20190516232209",
-            "StackId": "arn:aws:cloudformation:eu-west-2:348412102590:stack/machiavellian-maxims-dev-20190516232209/0bdbfeb0-7829-11e9-9401-06e776f53978"
+            "DeploymentBucketName": "machiavellian-maxims-dev-20190526212528-deployment",
+            "UnauthRoleName": "machiavellian-maxims-dev-20190526212528-unauthRole",
+            "StackName": "machiavellian-maxims-dev-20190526212528",
+            "StackId": "arn:aws:cloudformation:eu-west-2:348412102590:stack/machiavellian-maxims-dev-20190526212528/6704daf0-7ff4-11e9-9a69-0a4ccf28bdfc"
         }
     }
 }

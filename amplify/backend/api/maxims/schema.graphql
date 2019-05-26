@@ -1,5 +1,15 @@
 type Maxim @model {
-  id: ID!
-  name: String!
-  content: String
+	id: ID!
+	name: String!
+	maxim: String!
+}
+
+input CreateMaximInput {
+	id: ID
+	name: String!
+	maxim: String
+}
+
+type Mutation {
+	batchAddMaxims(maxims: [CreateMaximInput]): [Maxim]
 }

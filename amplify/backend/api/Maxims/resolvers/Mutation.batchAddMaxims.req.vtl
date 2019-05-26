@@ -1,0 +1,13 @@
+#set($maximsdata = [])
+#foreach($item in ${ctx.args.maxims})
+    $util.qr($item.put("__typename", "Maxim"))
+    $util.qr($item.put("id", $util.defaultIfNullOrBlank($item.id, $util.autoId())))
+    $util.qr($maximsdata.add($util.dynamodb.toMapValues($item)))
+#end
+{
+  "version": "2018-05-29",
+  "operation": "BatchPutItem",
+  "tables": {
+      "Maxim-r4lnrhegfjc2dag3kdehahzsdu-dev": $utils.toJson($maximsdata)
+  }
+}

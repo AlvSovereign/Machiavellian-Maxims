@@ -12,11 +12,12 @@ import MaximApi from '../../api/client';
 import ConvertMarkdown from '../../components/Markdown';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
-import { _listMaxims } from '../../graphql/queries';
-import { RouteComponentProps } from 'react-router';
+import { listMaxims } from '../../graphql/queries';
+import { batchAddMaxims } from '../../graphql/mutations';
+import API, { graphqlOperation } from '@aws-amplify/api';
 
 const Maxim: React.FC<IProps> = props => {
-	const [maxim, setMaxim] = React.useState();
+	const [maxim, setMaxims] = React.useState<Array<Maxims> | []>([]);
 	const theme: any = useTheme();
 	const useStyles = makeStyles({
 		root: {
@@ -44,8 +45,13 @@ const Maxim: React.FC<IProps> = props => {
 
 	//fetch maxim
 	React.useEffect(() => {
-		// fetchMaxim();
-	}, []);
+		(async () => {
+			const maxims = await MaximApi.fetchAllMaxims({ baseUrl: '' });
+			console.log('maxims: ', maxims);
+
+			// await API.graphql(graphqlOperation(batchAddMaxims, { input: maxims }));
+		})();
+	}, [props.maxims]);
 
 	return (
 		<Grid
@@ -57,12 +63,12 @@ const Maxim: React.FC<IProps> = props => {
 		>
 			<Grid item xs={10}>
 				{props.maxims.map(maxim => (
-					<>
+					<div key={maxim.id}>
 						<ConvertMarkdown>{maxim.name}</ConvertMarkdown>
 						<ConvertMarkdown fontStyle={'serif'}>
 							{maxim.content}
 						</ConvertMarkdown>
-					</>
+					</div>
 				))}
 				<Divider className={classes.root} />
 				<Grid
@@ -91,17 +97,17 @@ const Maxim: React.FC<IProps> = props => {
 	);
 };
 
-export default graphql(gql(_listMaxims), {
+export default graphql(gql(listMaxims), {
 	props: (props: any) => ({
 		maxims: props.data.listMaxims ? props.data.listMaxims.items : []
 	})
 })(Maxim);
 
 interface IProps {
-	maxims: Array<Mixims>;
+	maxims: Array<Maxims>;
 }
 
-interface Mixims {
+interface Maxims {
 	__typename: string;
 	id: string;
 	name: string;

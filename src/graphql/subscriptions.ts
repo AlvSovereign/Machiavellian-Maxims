@@ -5,7 +5,7 @@ export const onCreateMaxim = `subscription OnCreateMaxim {
   onCreateMaxim {
     id
     name
-    content
+    maxim
   }
 }
 `;
@@ -13,7 +13,7 @@ export const onUpdateMaxim = `subscription OnUpdateMaxim {
   onUpdateMaxim {
     id
     name
-    content
+    maxim
   }
 }
 `;
@@ -21,7 +21,7 @@ export const onDeleteMaxim = `subscription OnDeleteMaxim {
   onDeleteMaxim {
     id
     name
-    content
+    maxim
   }
 }
 `;

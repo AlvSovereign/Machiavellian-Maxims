@@ -64,6 +64,18 @@ const MaximApi = {
 			console.error(error);
 			return error;
 		}
+	},
+	fetchAllMaxims: async ({ baseUrl }: MaximApiArgs): Promise<object> => {
+		try {
+			const response: any = await clientApi({ baseUrl }).get(
+				'maxims/maxims.json'
+			);
+
+			return response;
+		} catch (error) {
+			console.error(error);
+			return error;
+		}
 	}
 };
 

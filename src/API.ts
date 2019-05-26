@@ -4,13 +4,13 @@
 export type CreateMaximInput = {
   id?: string | null,
   name: string,
-  content?: string | null,
+  maxim?: string | null,
 };
 
 export type UpdateMaximInput = {
   id: string,
   name?: string | null,
-  content?: string | null,
+  maxim?: string | null,
 };
 
 export type DeleteMaximInput = {
@@ -20,7 +20,7 @@ export type DeleteMaximInput = {
 export type ModelMaximFilterInput = {
   id?: ModelIDFilterInput | null,
   name?: ModelStringFilterInput | null,
-  content?: ModelStringFilterInput | null,
+  maxim?: ModelStringFilterInput | null,
   and?: Array< ModelMaximFilterInput | null > | null,
   or?: Array< ModelMaximFilterInput | null > | null,
   not?: ModelMaximFilterInput | null,
@@ -52,6 +52,19 @@ export type ModelStringFilterInput = {
   beginsWith?: string | null,
 };
 
+export type BatchAddMaximsMutationVariables = {
+  maxims?: Array< CreateMaximInput | null > | null,
+};
+
+export type BatchAddMaximsMutation = {
+  batchAddMaxims:  Array< {
+    __typename: "Maxim",
+    id: string,
+    name: string,
+    maxim: string,
+  } | null > | null,
+};
+
 export type CreateMaximMutationVariables = {
   input: CreateMaximInput,
 };
@@ -61,7 +74,7 @@ export type CreateMaximMutation = {
     __typename: "Maxim",
     id: string,
     name: string,
-    content: string | null,
+    maxim: string,
   } | null,
 };
 
@@ -74,7 +87,7 @@ export type UpdateMaximMutation = {
     __typename: "Maxim",
     id: string,
     name: string,
-    content: string | null,
+    maxim: string,
   } | null,
 };
 
@@ -87,7 +100,7 @@ export type DeleteMaximMutation = {
     __typename: "Maxim",
     id: string,
     name: string,
-    content: string | null,
+    maxim: string,
   } | null,
 };
 
@@ -100,7 +113,7 @@ export type GetMaximQuery = {
     __typename: "Maxim",
     id: string,
     name: string,
-    content: string | null,
+    maxim: string,
   } | null,
 };
 
@@ -117,7 +130,7 @@ export type ListMaximsQuery = {
       __typename: "Maxim",
       id: string,
       name: string,
-      content: string | null,
+      maxim: string,
     } | null > | null,
     nextToken: string | null,
   } | null,
@@ -128,7 +141,7 @@ export type OnCreateMaximSubscription = {
     __typename: "Maxim",
     id: string,
     name: string,
-    content: string | null,
+    maxim: string,
   } | null,
 };
 
@@ -137,7 +150,7 @@ export type OnUpdateMaximSubscription = {
     __typename: "Maxim",
     id: string,
     name: string,
-    content: string | null,
+    maxim: string,
   } | null,
 };
 
@@ -146,6 +159,6 @@ export type OnDeleteMaximSubscription = {
     __typename: "Maxim",
     id: string,
     name: string,
-    content: string | null,
+    maxim: string,
   } | null,
 };
