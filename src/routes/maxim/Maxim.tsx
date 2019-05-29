@@ -10,11 +10,13 @@ import { makeStyles, useTheme } from '@material-ui/styles';
 import { Add, KeyboardArrowLeft, KeyboardArrowRight } from '@material-ui/icons';
 import MaximApi from '../../api/client';
 import ConvertMarkdown from '../../components/Markdown';
-import { graphql } from 'react-apollo';
+import { graphql, compose } from 'react-apollo';
 import gql from 'graphql-tag';
 import { listMaxims } from '../../graphql/queries';
+import { client } from '../../index';
 import { batchAddMaxims } from '../../graphql/mutations';
 import API, { graphqlOperation } from '@aws-amplify/api';
+import { graphqlMutation } from 'aws-appsync-react';
 
 const Maxim: React.FC<IProps> = props => {
 	const [maxim, setMaxims] = React.useState<Array<Maxims> | []>([]);
@@ -46,12 +48,17 @@ const Maxim: React.FC<IProps> = props => {
 	//fetch maxim
 	React.useEffect(() => {
 		(async () => {
-			const maxims = await MaximApi.fetchAllMaxims({ baseUrl: '' });
-			console.log('maxims: ', maxims);
+			const mutation = gql(batchAddMaxims);
+			const maxims = [];
 
-			// await API.graphql(graphqlOperation(batchAddMaxims, { input: maxims }));
+			// const result = await client.mutate({
+			// 	mutation: mutation,
+			// 	variables: {
+			// 		maxims: maxims
+			// 	}
+			// });
 		})();
-	}, [props.maxims]);
+	}, []);
 
 	return (
 		<Grid
@@ -84,6 +91,13 @@ const Maxim: React.FC<IProps> = props => {
 					{/* <Button variant={'contained'} color={'primary'} onClick={fetchMaxim}>
 						{'Random Maxim'}
 					</Button> */}
+					<Button
+						variant={'contained'}
+						color={'primary'}
+						onClick={props.batchAddMaxims}
+					>
+						{'Add Maxim'}
+					</Button>
 					<Button>
 						<KeyboardArrowRight />
 					</Button>
@@ -97,14 +111,26 @@ const Maxim: React.FC<IProps> = props => {
 	);
 };
 
-export default graphql(gql(listMaxims), {
-	props: (props: any) => ({
-		maxims: props.data.listMaxims ? props.data.listMaxims.items : []
+const fetchMaxims = async () => {
+	const result: any = await MaximApi.fetchAllMaxims({
+		baseUrl: ''
+	});
+
+	return result.maxims;
+};
+
+export default compose(
+	graphql(gql(listMaxims), {
+		props: (props: any) => ({
+			maxims: props.data.listMaxims ? props.data.listMaxims.items : []
+		})
 	})
-})(Maxim);
+)(Maxim);
 
 interface IProps {
 	maxims: Array<Maxims>;
+	batchAddMaxims: () => void;
+	client: any;
 }
 
 interface Maxims {

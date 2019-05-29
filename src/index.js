@@ -8,7 +8,7 @@ import AppSyncConfig from './aws-exports';
 import { ApolloProvider } from 'react-apollo';
 import { Rehydrated } from 'aws-appsync-react'; // this needs to also be installed when working with React
 
-const client = new AWSAppSyncClient({
+export const client = new AWSAppSyncClient({
 	url: AppSyncConfig.aws_appsync_graphqlEndpoint,
 	region: AppSyncConfig.aws_appsync_region,
 	auth: {

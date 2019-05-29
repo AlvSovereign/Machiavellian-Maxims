@@ -53,7 +53,7 @@ export type ModelStringFilterInput = {
 };
 
 export type BatchAddMaximsMutationVariables = {
-  maxims?: Array< CreateMaximInput | null > | null,
+  maxims?: Array< CreateMaximInput > | null,
 };
 
 export type BatchAddMaximsMutation = {

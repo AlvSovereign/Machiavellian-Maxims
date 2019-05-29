@@ -1,7 +1,7 @@
 // tslint:disable
 // this is an auto generated file. This will be overwritten
 
-export const batchAddMaxims = `mutation BatchAddMaxims($maxims: [CreateMaximInput]) {
+export const batchAddMaxims = `mutation BatchAddMaxims($maxims: [CreateMaximInput!]) {
   batchAddMaxims(maxims: $maxims) {
     id
     name

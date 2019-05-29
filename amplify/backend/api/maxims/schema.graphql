@@ -11,5 +11,5 @@ input CreateMaximInput {
 }
 
 type Mutation {
-	batchAddMaxims(maxims: [CreateMaximInput]): [Maxim]
+	batchAddMaxims(maxims: [CreateMaximInput!]): [Maxim]
 }
