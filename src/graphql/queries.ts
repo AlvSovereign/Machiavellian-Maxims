@@ -5,6 +5,7 @@ export const getMaxim = `query GetMaxim($id: ID!) {
   getMaxim(id: $id) {
     id
     name
+    number
     maxim
   }
 }
@@ -18,6 +19,7 @@ export const listMaxims = `query ListMaxims(
     items {
       id
       name
+      number
       maxim
     }
     nextToken

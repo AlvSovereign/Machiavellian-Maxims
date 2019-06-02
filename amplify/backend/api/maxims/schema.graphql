@@ -1,12 +1,14 @@
 type Maxim @model {
 	id: ID!
 	name: String!
+	number: String!
 	maxim: String!
 }
 
 input CreateMaximInput {
 	id: ID
 	name: String!
+	number: String!
 	maxim: String
 }
 

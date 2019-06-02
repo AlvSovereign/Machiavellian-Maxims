@@ -49,14 +49,38 @@ const Maxim: React.FC<IProps> = props => {
 	React.useEffect(() => {
 		(async () => {
 			const mutation = gql(batchAddMaxims);
-			const maxims = [];
 
-			// const result = await client.mutate({
-			// 	mutation: mutation,
-			// 	variables: {
-			// 		maxims: maxims
-			// 	}
-			// });
+			const maxims: any = await MaximApi.fetchAllMaxims({
+				baseUrl: ''
+			});
+
+			let batchMaxims = [];
+			let currentBatch = [];
+			let i = 0;
+
+			for (let item of maxims.maxims) {
+				currentBatch.push(item);
+				i++;
+
+				if (i % 25 == 0) {
+					// when you have 25 ready..
+					batchMaxims.push(currentBatch);
+					currentBatch = [];
+				}
+			}
+
+			if (currentBatch.length > 0 && currentBatch.length != 25) {
+				batchMaxims.push(currentBatch);
+			}
+
+			// for (let batch of batchMaxims) {
+			// 	await client.mutate({
+			// 		mutation: mutation,
+			// 		variables: {
+			// 			maxims: batch
+			// 		}
+			// 	});
+			// }
 		})();
 	}, []);
 
@@ -69,14 +93,14 @@ const Maxim: React.FC<IProps> = props => {
 			className={classes.grid}
 		>
 			<Grid item xs={10}>
-				{props.maxims.map(maxim => (
+				{/* {props.maxims.map(maxim => (
 					<div key={maxim.id}>
 						<ConvertMarkdown>{maxim.name}</ConvertMarkdown>
 						<ConvertMarkdown fontStyle={'serif'}>
 							{maxim.content}
 						</ConvertMarkdown>
 					</div>
-				))}
+				))} */}
 				<Divider className={classes.root} />
 				<Grid
 					container
