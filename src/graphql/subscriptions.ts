@@ -4,8 +4,8 @@
 export const onCreateMaxim = `subscription OnCreateMaxim {
   onCreateMaxim {
     id
+    index
     name
-    number
     maxim
   }
 }
@@ -13,8 +13,8 @@ export const onCreateMaxim = `subscription OnCreateMaxim {
 export const onUpdateMaxim = `subscription OnUpdateMaxim {
   onUpdateMaxim {
     id
+    index
     name
-    number
     maxim
   }
 }
@@ -22,8 +22,8 @@ export const onUpdateMaxim = `subscription OnUpdateMaxim {
 export const onDeleteMaxim = `subscription OnDeleteMaxim {
   onDeleteMaxim {
     id
+    index
     name
-    number
     maxim
   }
 }

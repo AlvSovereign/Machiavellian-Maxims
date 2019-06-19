@@ -4,8 +4,8 @@
 export const batchAddMaxims = `mutation BatchAddMaxims($maxims: [CreateMaximInput!]) {
   batchAddMaxims(maxims: $maxims) {
     id
+    index
     name
-    number
     maxim
   }
 }
@@ -13,8 +13,8 @@ export const batchAddMaxims = `mutation BatchAddMaxims($maxims: [CreateMaximInpu
 export const createMaxim = `mutation CreateMaxim($input: CreateMaximInput!) {
   createMaxim(input: $input) {
     id
+    index
     name
-    number
     maxim
   }
 }
@@ -22,8 +22,8 @@ export const createMaxim = `mutation CreateMaxim($input: CreateMaximInput!) {
 export const updateMaxim = `mutation UpdateMaxim($input: UpdateMaximInput!) {
   updateMaxim(input: $input) {
     id
+    index
     name
-    number
     maxim
   }
 }
@@ -31,8 +31,8 @@ export const updateMaxim = `mutation UpdateMaxim($input: UpdateMaximInput!) {
 export const deleteMaxim = `mutation DeleteMaxim($input: DeleteMaximInput!) {
   deleteMaxim(input: $input) {
     id
+    index
     name
-    number
     maxim
   }
 }

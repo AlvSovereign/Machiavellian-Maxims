@@ -8,18 +8,14 @@ import {
 } from '@material-ui/core';
 import { makeStyles, useTheme } from '@material-ui/styles';
 import { Add, KeyboardArrowLeft, KeyboardArrowRight } from '@material-ui/icons';
-import MaximApi from '../../api/client';
 import ConvertMarkdown from '../../components/Markdown';
-import { graphql, compose } from 'react-apollo';
 import gql from 'graphql-tag';
-import { listMaxims } from '../../graphql/queries';
-import { client } from '../../index';
-import { batchAddMaxims } from '../../graphql/mutations';
-import API, { graphqlOperation } from '@aws-amplify/api';
-import { graphqlMutation } from 'aws-appsync-react';
+import { getRandomMaxim } from '../../graphql/queries';
+import { Query } from 'react-apollo';
+import { isEmpty as _isEmpty } from 'lodash-es';
 
 const Maxim: React.FC<IProps> = props => {
-	const [maxim, setMaxims] = React.useState<Array<Maxims> | []>([]);
+	const [maxim, setMaxim] = React.useState<string>('');
 	const theme: any = useTheme();
 	const useStyles = makeStyles({
 		root: {
@@ -37,52 +33,21 @@ const Maxim: React.FC<IProps> = props => {
 	});
 	const classes = useStyles();
 
-	// const fetchMaxim = async () => {
-	// 	const response: any = await MaximApi.fetchRandomMaxim({
-	// 		baseUrl: ''
-	// 	});
+	const getRandomNumber = (min: number, max: number) => {
+		const random = Math.floor(Math.random() * (max - min) + min);
+		if (random < 100) {
+			return `0${random}`
+		}
+		if (random < 10) {
+			return `00${random}`
+		}
+		return `${random}`
+	};
 
-	// 	setMaxim(response);
-	// };
-
-	//fetch maxim
 	React.useEffect(() => {
-		(async () => {
-			const mutation = gql(batchAddMaxims);
-
-			const maxims: any = await MaximApi.fetchAllMaxims({
-				baseUrl: ''
-			});
-
-			let batchMaxims = [];
-			let currentBatch = [];
-			let i = 0;
-
-			for (let item of maxims.maxims) {
-				currentBatch.push(item);
-				i++;
-
-				if (i % 25 == 0) {
-					// when you have 25 ready..
-					batchMaxims.push(currentBatch);
-					currentBatch = [];
-				}
-			}
-
-			if (currentBatch.length > 0 && currentBatch.length != 25) {
-				batchMaxims.push(currentBatch);
-			}
-
-			// for (let batch of batchMaxims) {
-			// 	await client.mutate({
-			// 		mutation: mutation,
-			// 		variables: {
-			// 			maxims: batch
-			// 		}
-			// 	});
-			// }
-		})();
+		setMaxim(getRandomNumber(0, 290));
 	}, []);
+	const GET_RANDOM_MAXIM = gql(getRandomMaxim);
 
 	return (
 		<Grid
@@ -93,14 +58,33 @@ const Maxim: React.FC<IProps> = props => {
 			className={classes.grid}
 		>
 			<Grid item xs={10}>
-				{/* {props.maxims.map(maxim => (
-					<div key={maxim.id}>
-						<ConvertMarkdown>{maxim.name}</ConvertMarkdown>
-						<ConvertMarkdown fontStyle={'serif'}>
-							{maxim.content}
-						</ConvertMarkdown>
-					</div>
-				))} */}
+				{maxim && (
+					<Query query={GET_RANDOM_MAXIM} variables={{ index: maxim }}>
+						{({ loading, error, data }: any) => {
+							if (loading) {
+								return <CircularProgress />;
+							}
+
+							if (error) {
+								console.error(error);
+								return `Error! ${error.message}`;
+							}
+
+							if (data && !_isEmpty(data.getRandomMaxim)) {
+								const { maxim, name } = data.getRandomMaxim;
+
+								return (
+									<div>
+										<ConvertMarkdown>{name}</ConvertMarkdown>
+										<ConvertMarkdown>{maxim}</ConvertMarkdown>
+									</div>
+								);
+							} else {
+								return null
+							}
+						}}
+					</Query>
+				)}
 				<Divider className={classes.root} />
 				<Grid
 					container
@@ -108,24 +92,21 @@ const Maxim: React.FC<IProps> = props => {
 					alignItems={'center'}
 					justify={'space-around'}
 				>
-					{/* <Grid item xs={10}> */}
-					<Button>
-						<KeyboardArrowLeft />
-					</Button>
-					{/* <Button variant={'contained'} color={'primary'} onClick={fetchMaxim}>
-						{'Random Maxim'}
-					</Button> */}
-					<Button
-						variant={'contained'}
-						color={'primary'}
-						onClick={props.batchAddMaxims}
-					>
-						{'Add Maxim'}
-					</Button>
-					<Button>
-						<KeyboardArrowRight />
-					</Button>
-					{/* </Grid> */}
+					<Grid item xs={10}>
+						<Button>
+							<KeyboardArrowLeft />
+						</Button>
+						<Button
+							variant={'contained'}
+							color={'primary'}
+							onClick={() =>setMaxim(getRandomNumber(0, 290))}
+						>
+							{'Random Maxim'}
+						</Button>
+						<Button>
+							<KeyboardArrowRight />
+						</Button>
+					</Grid>
 				</Grid>
 			</Grid>
 			<Fab color='primary' aria-label='Add' className={classes.fab}>
@@ -135,21 +116,7 @@ const Maxim: React.FC<IProps> = props => {
 	);
 };
 
-const fetchMaxims = async () => {
-	const result: any = await MaximApi.fetchAllMaxims({
-		baseUrl: ''
-	});
-
-	return result.maxims;
-};
-
-export default compose(
-	graphql(gql(listMaxims), {
-		props: (props: any) => ({
-			maxims: props.data.listMaxims ? props.data.listMaxims.items : []
-		})
-	})
-)(Maxim);
+export default Maxim;
 
 interface IProps {
 	maxims: Array<Maxims>;
@@ -161,5 +128,6 @@ interface Maxims {
 	__typename: string;
 	id: string;
 	name: string;
-	content: string;
+	nuimber: string;
+	maxim: string;
 }

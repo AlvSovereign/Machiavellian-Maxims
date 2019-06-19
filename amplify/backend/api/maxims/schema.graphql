@@ -1,17 +1,21 @@
 type Maxim @model {
-	id: ID!
+	id: String!
+	index: String!
 	name: String!
-	number: String!
 	maxim: String!
 }
 
 input CreateMaximInput {
-	id: ID
+	id: String
+	index: String!
 	name: String!
-	number: String!
 	maxim: String
 }
 
 type Mutation {
 	batchAddMaxims(maxims: [CreateMaximInput!]): [Maxim]
+}
+
+type Query {
+	getRandomMaxim(index: String!): Maxim
 }
