@@ -3,7 +3,7 @@ import { Grid, Fab } from '@material-ui/core';
 import { makeStyles, useTheme } from '@material-ui/styles';
 import { Share } from '@material-ui/icons';
 import { QueryMaxim } from '../../components/QueryMaxim';
-import html2canvas from 'html2canvas';
+import { ShareMaxim } from './shareMaxim';
 
 const Maxim: React.FC<IProps> = props => {
 	const theme: any = useTheme();
@@ -12,7 +12,7 @@ const Maxim: React.FC<IProps> = props => {
 			margin: '2em 0'
 		},
 		grid: {
-			maxWidth: 720
+			width: 720
 		},
 		fab: {
 			position: 'absolute',
@@ -23,11 +23,16 @@ const Maxim: React.FC<IProps> = props => {
 	});
 	const classes = useStyles();
 
-	function shareMaxim() {
-		html2canvas(document.body).then(function(canvas) {
-			console.log('canvas: ', canvas);
-			document.body.appendChild(canvas);
+	function share() {
+		const mediaDimensions = ShareMaxim.getDimensions({
+			media: 'InstagramFeed'
 		});
+		const imageCreation = ShareMaxim.createImage({
+			dimensions: mediaDimensions,
+			text:
+				'In social matters, people do not reward he who is most logical, but rather he who is most impressive.'
+		});
+		console.log('imageCreation: ', imageCreation);
 	}
 
 	return (
@@ -42,7 +47,7 @@ const Maxim: React.FC<IProps> = props => {
 				color='primary'
 				aria-label='Add'
 				className={classes.fab}
-				onClick={() => shareMaxim()}>
+				onClick={() => share()}>
 				<Share />
 			</Fab>
 		</Grid>

@@ -35,6 +35,7 @@ function App() {
 				/>
 				{/* <Route component={routes.invalidPage.component} /> */}
 			</Router>
+			<div id={'maxim-image'} />
 		</ThemeProvider>
 	);
 }
