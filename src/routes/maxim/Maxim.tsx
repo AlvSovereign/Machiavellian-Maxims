@@ -1,8 +1,9 @@
 import * as React from 'react';
 import { Grid, Fab } from '@material-ui/core';
 import { makeStyles, useTheme } from '@material-ui/styles';
-import { Add } from '@material-ui/icons';
-import { QueryMaxim } from './QueryMaxim';
+import { Share } from '@material-ui/icons';
+import { QueryMaxim } from '../../components/QueryMaxim';
+import html2canvas from 'html2canvas';
 
 const Maxim: React.FC<IProps> = props => {
 	const theme: any = useTheme();
@@ -22,17 +23,27 @@ const Maxim: React.FC<IProps> = props => {
 	});
 	const classes = useStyles();
 
+	function shareMaxim() {
+		html2canvas(document.body).then(function(canvas) {
+			console.log('canvas: ', canvas);
+			document.body.appendChild(canvas);
+		});
+	}
+
 	return (
 		<Grid
 			container
 			direction={'column'}
 			alignItems={'center'}
 			justify={'center'}
-			className={classes.grid}
-		>
+			className={classes.grid}>
 			<QueryMaxim />
-			<Fab color='primary' aria-label='Add' className={classes.fab}>
-				<Add />
+			<Fab
+				color='primary'
+				aria-label='Add'
+				className={classes.fab}
+				onClick={() => shareMaxim()}>
+				<Share />
 			</Fab>
 		</Grid>
 	);

@@ -1,16 +1,24 @@
 import * as React from 'react';
-import { Grid, Button, Divider, CircularProgress } from '@material-ui/core';
+import {
+	Grid,
+	Button,
+	Divider,
+	CircularProgress,
+	Typography
+} from '@material-ui/core';
 import { makeStyles, useTheme } from '@material-ui/styles';
 import { KeyboardArrowLeft, KeyboardArrowRight } from '@material-ui/icons';
-import ConvertMarkdown from '../../components/Markdown';
+import ConvertMarkdown from './Markdown';
 import gql from 'graphql-tag';
-import { getRandomMaxim } from '../../graphql/queries';
+import { getRandomMaxim } from '../graphql/queries';
 import { Query } from 'react-apollo';
 import { isEmpty as _isEmpty } from 'lodash-es';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 const QueryMaxim: React.FC<IProps> = props => {
 	const [maxim, setMaxim] = React.useState<string>('');
 	const theme: any = useTheme();
+	const mobile = useMediaQuery(theme.breakpoints.down('sm'));
 	const useStyles = makeStyles({
 		root: {
 			margin: '2em 0'
@@ -23,6 +31,10 @@ const QueryMaxim: React.FC<IProps> = props => {
 			bottom: theme.spacing(2),
 			right: theme.spacing(2),
 			margin: theme.spacing(1)
+		},
+		serif: {
+			fontFamily: 'CalendasPlus, serif',
+			lineHeight: mobile ? 1.5 : 2
 		}
 	});
 	const classes = useStyles();
@@ -99,28 +111,39 @@ const QueryMaxim: React.FC<IProps> = props => {
 					}}
 				</Query>
 			)}
+			{/* <Divider className={classes.root} />
+			<Grid
+				container
+				direction={'row'}
+				alignItems={'center'}
+				justify={'space-around'}>
+				<Typography
+					gutterBottom
+					align={'center'}
+					variant={'h6'}
+					className={classes.serif}
+					{...props}>
+					{'ILLIMITABLEMEN.COM'}
+				</Typography>
+			</Grid> */}
 			<Divider className={classes.root} />
 			<Grid
 				container
 				direction={'row'}
 				alignItems={'center'}
-				justify={'space-around'}
-			>
-				<Grid item xs={10}>
-					<Button onClick={() => previousMaxim(maxim)}>
-						<KeyboardArrowLeft />
-					</Button>
-					<Button
-						variant={'contained'}
-						color={'primary'}
-						onClick={() => setMaxim(getRandomNumber(1, 290))}
-					>
-						{'Random Maxim'}
-					</Button>
-					<Button onClick={() => nextMaxim(maxim)}>
-						<KeyboardArrowRight />
-					</Button>
-				</Grid>
+				justify={'space-around'}>
+				<Button onClick={() => previousMaxim(maxim)}>
+					<KeyboardArrowLeft />
+				</Button>
+				<Button
+					variant={'contained'}
+					color={'primary'}
+					onClick={() => setMaxim(getRandomNumber(1, 290))}>
+					{'Random Maxim'}
+				</Button>
+				<Button onClick={() => nextMaxim(maxim)}>
+					<KeyboardArrowRight />
+				</Button>
 			</Grid>
 		</Grid>
 	);

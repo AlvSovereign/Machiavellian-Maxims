@@ -45,7 +45,7 @@ const ConvertMarkdown = (props: IProps) => {
 					className: classes.root
 				},
 				component: (props: any) => (
-					<Typography gutterBottom variant={'h5'} {...props} />
+					<Typography gutterBottom align={'center'} variant={'h5'} {...props} />
 				)
 			},
 			span: {
@@ -53,7 +53,12 @@ const ConvertMarkdown = (props: IProps) => {
 					className: `${classes.root} ${classes.serif}`
 				},
 				component: (props: any) => (
-					<Typography gutterBottom variant={mobile ? 'h6' : 'h5'} {...props} />
+					<Typography
+						gutterBottom
+						align={mobile ? 'center' : 'left'}
+						variant={mobile ? 'h6' : 'h5'}
+						{...props}
+					/>
 				)
 			},
 			a: {
