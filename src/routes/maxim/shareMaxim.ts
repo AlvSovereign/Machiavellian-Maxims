@@ -1,4 +1,3 @@
-import * as React from 'react';
 import Konva from 'konva';
 
 const _ShareMaxim = {

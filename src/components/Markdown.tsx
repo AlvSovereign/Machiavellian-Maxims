@@ -20,8 +20,7 @@ const ConvertMarkdown = (props: IProps) => {
 				zIndex: -10
 			}
 		},
-		serif: {
-			fontFamily: 'CalendasPlus, serif',
+		content: {
 			lineHeight: mobile ? 1.5 : 2
 		}
 	});
@@ -50,13 +49,14 @@ const ConvertMarkdown = (props: IProps) => {
 			},
 			span: {
 				props: {
-					className: `${classes.root} ${classes.serif}`
+					className: `${classes.root} ${classes.content}`
 				},
 				component: (props: any) => (
 					<Typography
 						gutterBottom
 						align={mobile ? 'center' : 'left'}
 						variant={mobile ? 'h6' : 'h5'}
+						component={'p'}
 						{...props}
 					/>
 				)

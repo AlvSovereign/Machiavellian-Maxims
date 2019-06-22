@@ -1,11 +1,5 @@
 import * as React from 'react';
-import {
-	Grid,
-	Button,
-	Divider,
-	CircularProgress,
-	Typography
-} from '@material-ui/core';
+import { Grid, Button, Divider, CircularProgress } from '@material-ui/core';
 import { makeStyles, useTheme } from '@material-ui/styles';
 import { KeyboardArrowLeft, KeyboardArrowRight } from '@material-ui/icons';
 import ConvertMarkdown from './Markdown';
@@ -111,21 +105,6 @@ const QueryMaxim: React.FC<IProps> = props => {
 					}}
 				</Query>
 			)}
-			{/* <Divider className={classes.root} />
-			<Grid
-				container
-				direction={'row'}
-				alignItems={'center'}
-				justify={'space-around'}>
-				<Typography
-					gutterBottom
-					align={'center'}
-					variant={'h6'}
-					className={classes.serif}
-					{...props}>
-					{'ILLIMITABLEMEN.COM'}
-				</Typography>
-			</Grid> */}
 			<Divider className={classes.root} />
 			<Grid
 				container

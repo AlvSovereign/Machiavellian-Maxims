@@ -32,7 +32,6 @@ const Maxim: React.FC<IProps> = props => {
 			text:
 				'In social matters, people do not reward he who is most logical, but rather he who is most impressive.'
 		});
-		console.log('imageCreation: ', imageCreation);
 	}
 
 	return (

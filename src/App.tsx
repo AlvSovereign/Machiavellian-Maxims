@@ -11,15 +11,16 @@ const theme = createMuiTheme({
 		primary: { main: red.A700 }
 	},
 	typography: {
-		fontFamily:
-			'Geomanist, "CalendasPlus", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif'
-	},
-	overrides: {
-		MuiCssBaseline: {
-			'@global': {
-				'@fontFamily': `GeomanistLight,	GeomanistRegular,	GeomanistMedium, CalendasPlus`
-			}
-		}
+		fontFamily: [
+			'CalendasPlus',
+			'-apple-system',
+			'BlinkMacSystemFont',
+			'"Segoe UI"',
+			'Roboto',
+			'"Helvetica Neue"',
+			'Arial',
+			'sans-serif'
+		].join(', ')
 	}
 });
 
