@@ -12,15 +12,17 @@ const ConvertMarkdown = (props: IProps) => {
 			'&:before': {
 				content: 'open-quote',
 				position: 'absolute',
+				left: '-5%',
 				color: theme.palette.secondary.main,
-				fontSize: '7.5em',
+				fontSize: '10.5em',
 				fontWeight: 700,
-				lineHeight: 1,
+				lineHeight: 0.6,
 				opacity: 0.2,
 				zIndex: -10
 			}
 		},
 		content: {
+			position: 'relative',
 			lineHeight: mobile ? 1.5 : 2
 		}
 	});
@@ -35,6 +37,7 @@ const ConvertMarkdown = (props: IProps) => {
 						variant={mobile ? 'h5' : 'h4'}
 						align={'right'}
 						color={'primary'}
+						component={'h2'}
 						{...props}
 					/>
 				)

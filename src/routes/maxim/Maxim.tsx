@@ -12,7 +12,8 @@ const Maxim: React.FC<IProps> = props => {
 			margin: '2em 0'
 		},
 		grid: {
-			width: 720
+			width: '100%',
+			maxWidth: 720
 		},
 		fab: {
 			position: 'absolute',

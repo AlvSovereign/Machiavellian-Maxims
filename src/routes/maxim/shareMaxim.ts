@@ -35,7 +35,7 @@ const _ShareMaxim = {
 			y: stage.height() / 2,
 			text,
 			fontSize: 30,
-			fontFamily: 'Calibri',
+			fontFamily: 'CalendasPlus',
 			fill: 'green',
 			align: 'center'
 		});
