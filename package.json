@@ -21,7 +21,6 @@
 		"konva": "^3.3.3",
 		"lodash-es": "^4.17.11",
 		"markdown-to-jsx": "^6.9.4",
-		"npm": "^6.9.0",
 		"react": "^16.8.6",
 		"react-apollo": "^2.5.5",
 		"react-dom": "^16.8.6",
