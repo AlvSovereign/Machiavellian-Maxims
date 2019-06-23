@@ -3,7 +3,6 @@ import { Grid, Fab } from '@material-ui/core';
 import { makeStyles, useTheme } from '@material-ui/styles';
 import { Share } from '@material-ui/icons';
 import { QueryMaxim } from '../../components/QueryMaxim';
-import { ShareMaxim } from './shareMaxim';
 
 const Maxim: React.FC<IProps> = props => {
 	const theme: any = useTheme();
@@ -24,15 +23,9 @@ const Maxim: React.FC<IProps> = props => {
 	});
 	const classes = useStyles();
 
-	function share() {
-		const mediaDimensions = ShareMaxim.getDimensions({
-			media: 'InstagramFeed'
-		});
-		const imageCreation = ShareMaxim.createImage({
-			dimensions: mediaDimensions,
-			text:
-				'In social matters, people do not reward he who is most logical, but rather he who is most impressive.'
-		});
+	const [media, setMedia] = React.useState<string>('');
+	function displayShare(name: string) {
+		setMedia(name);
 	}
 
 	return (
@@ -42,12 +35,12 @@ const Maxim: React.FC<IProps> = props => {
 			alignItems={'center'}
 			justify={'center'}
 			className={classes.grid}>
-			<QueryMaxim />
+			<QueryMaxim media={media} />
 			<Fab
 				color='primary'
 				aria-label='Add'
 				className={classes.fab}
-				onClick={() => share()}>
+				onClick={() => displayShare('InstagramFeed')}>
 				<Share />
 			</Fab>
 		</Grid>
