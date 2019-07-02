@@ -8,7 +8,6 @@ function useClientRect() {
 	const [rect, setRect] = React.useState<any>(null);
 	const [node, setNode] = React.useState<any>(null);
 	const ref: any = React.useCallback((node: any) => {
-		console.log('node: ', node);
 		if (node !== null) {
 			setNode(node);
 			setRect(node.getClientRect());
@@ -31,12 +30,9 @@ const _ShareMaxim: React.FC<IProps> = ({
 	const [dividerNode, dividerRef] = useClientRect();
 	const [maximNode, maximRef] = useClientRect();
 	const [titleNode, titleRef] = useClientRect();
+	const [groupNode, groupRef] = useClientRect();
 
-	React.useEffect(() => {
-		console.log('dividerNode: ', dividerNode);
-		console.log('maximNode: ', maximNode);
-		console.log('attributionNode: ', attributionNode);
-	}, [maximNode]);
+	React.useEffect(() => {}, [groupNode]);
 
 	const useStyles = makeStyles({
 		root: {
@@ -54,19 +50,32 @@ const _ShareMaxim: React.FC<IProps> = ({
 					width: 1080
 				});
 				break;
+			default:
+				setDimensions({
+					height: 1080,
+					width: 1080
+				});
+				break;
 		}
 	}
 
-	React.useEffect(() => {
+	React.useLayoutEffect(() => {
 		getDimensions(media);
 	}, [media]);
 
 	return (
 		<Modal open={openModal} onClose={() => closeModal()}>
 			<Paper className={classes.root}>
-				<Stage width={dimensions.width} height={dimensions.height}>
+				<Stage height={dimensions.height} width={dimensions.width}>
 					<Layer>
-						<Group>
+						<Rect
+							fill={'white'}
+							height={dimensions.height}
+							width={dimensions.width}
+							x={0}
+							y={0}
+						/>
+						<Group ref={groupRef} absolutePosition={{ x: 0, y: -28 }}>
 							<Text
 								ref={titleRef}
 								align={'right'}
@@ -95,7 +104,7 @@ const _ShareMaxim: React.FC<IProps> = ({
 								fontFamily={'Times'}
 								// fontFamily={'CalendasPlus'}
 								lineHeight={2}
-								text={`We’re all players in a game. You’re a player or a piece on the board, you move or you’re moved. You play the game, or the game plays you. We’re all players in a game. You’re a player or a piece on the board, you move or you’re moved. You play the game, or the game plays you.`}
+								text={`We’re all players in a game. You’re a player or a piece on the board, you move or you’re moved. You play the game, or the game plays you. We’re all players in a game. You’re a player or a piece on the board, you move or you’re moved. You play the game, or the game plays you. `}
 								verticalAlign={'middle'}
 								width={dimensions.width / 2}
 								wrap={'word'}

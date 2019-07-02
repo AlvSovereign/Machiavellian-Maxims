@@ -24,6 +24,7 @@ const Maxim: React.FC<IProps> = props => {
 	const classes = useStyles();
 
 	const [media, setMedia] = React.useState<string>('');
+
 	function displayShare(name: string) {
 		setMedia(name);
 	}
