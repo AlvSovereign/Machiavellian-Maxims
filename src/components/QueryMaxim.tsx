@@ -14,7 +14,7 @@ import { getRandomMaxim } from '../graphql/queries';
 import { Query } from 'react-apollo';
 import { isEmpty as _isEmpty } from 'lodash-es';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
-import { ShareMaxim } from '../routes/maxim/shareMaxim';
+import { ShareMaxim } from './ShareMaxim';
 
 const QueryMaxim: React.FC<IProps> = ({ media }) => {
 	const theme: any = useTheme();

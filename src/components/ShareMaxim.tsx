@@ -3,6 +3,7 @@ import Konva from 'konva';
 import { Stage, Layer, Text, Group, Rect } from 'react-konva';
 import { Modal, Paper, makeStyles } from '@material-ui/core';
 import { useTheme } from '@material-ui/styles';
+import imageSizes from '../utils/image-sizes';
 
 function useClientRect() {
 	const [rect, setRect] = React.useState<any>(null);
@@ -45,16 +46,10 @@ const _ShareMaxim: React.FC<IProps> = ({
 	function getDimensions(media: string) {
 		switch (media) {
 			case 'InstagramFeed':
-				setDimensions({
-					height: 1350,
-					width: 1080
-				});
+				setDimensions(imageSizes.instagramFeedPortrait);
 				break;
 			default:
-				setDimensions({
-					height: 1080,
-					width: 1080
-				});
+				setDimensions(imageSizes.default);
 				break;
 		}
 	}
