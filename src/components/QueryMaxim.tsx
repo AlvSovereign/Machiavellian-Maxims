@@ -78,7 +78,7 @@ const QueryMaxim: React.FC<IProps> = ({ media }) => {
 
 	const [open, setOpen] = React.useState<boolean>(false);
 	React.useEffect(() => {
-		setOpen(true);
+		// setOpen(true);
 	}, [media]);
 
 	const GET_RANDOM_MAXIM = gql(getRandomMaxim);
