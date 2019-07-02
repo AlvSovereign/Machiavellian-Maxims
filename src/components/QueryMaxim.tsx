@@ -1,5 +1,11 @@
 import * as React from 'react';
-import { Grid, Button, Divider, CircularProgress } from '@material-ui/core';
+import {
+	Grid,
+	Button,
+	Divider,
+	CircularProgress,
+	Typography
+} from '@material-ui/core';
 import { makeStyles, useTheme } from '@material-ui/styles';
 import { KeyboardArrowLeft, KeyboardArrowRight } from '@material-ui/icons';
 import ConvertMarkdown from './Markdown';
@@ -78,7 +84,7 @@ const QueryMaxim: React.FC<IProps> = ({ media }) => {
 
 	const [open, setOpen] = React.useState<boolean>(false);
 	React.useEffect(() => {
-		// setOpen(true);
+		setOpen(true);
 	}, [media]);
 
 	const GET_RANDOM_MAXIM = gql(getRandomMaxim);
@@ -90,12 +96,38 @@ const QueryMaxim: React.FC<IProps> = ({ media }) => {
 					<Query query={GET_RANDOM_MAXIM} variables={{ index: maxim }}>
 						{({ loading, error, data }: any) => {
 							if (loading) {
-								return <CircularProgress />;
+								return (
+									<Grid
+										container
+										direction={'row'}
+										alignItems={'center'}
+										justify={'center'}>
+										<Grid item xs={12}>
+											<CircularProgress />
+										</Grid>
+									</Grid>
+								);
 							}
 
 							if (error) {
 								console.error(error);
-								return `Error! ${error.message}`;
+								return (
+									<Grid
+										container
+										direction={'row'}
+										alignItems={'center'}
+										justify={'center'}>
+										<Grid item xs={12}>
+											<Typography
+												gutterBottom
+												align={'center'}
+												variant={mobile ? 'h6' : 'h5'}
+												component={'p'}>
+												Error! Cannot find Maxim.
+											</Typography>
+										</Grid>
+									</Grid>
+								);
 							}
 
 							if (data && !_isEmpty(data.getRandomMaxim)) {
@@ -114,24 +146,24 @@ const QueryMaxim: React.FC<IProps> = ({ media }) => {
 					</Query>
 				)}
 				<Divider className={classes.root} />
-				<Grid
-					container
-					direction={'row'}
-					alignItems={'center'}
-					justify={'space-around'}>
-					<Button onClick={() => previousMaxim(maxim)}>
-						<KeyboardArrowLeft />
-					</Button>
-					<Button
-						variant={'contained'}
-						color={'primary'}
-						onClick={() => setMaxim(getRandomNumber(1, 290))}>
-						{'Random Maxim'}
-					</Button>
-					<Button onClick={() => nextMaxim(maxim)}>
-						<KeyboardArrowRight />
-					</Button>
-				</Grid>
+			</Grid>
+			<Grid
+				container
+				direction={'row'}
+				alignItems={'center'}
+				justify={'space-around'}>
+				<Button onClick={() => previousMaxim(maxim)}>
+					<KeyboardArrowLeft />
+				</Button>
+				<Button
+					variant={'contained'}
+					color={'primary'}
+					onClick={() => setMaxim(getRandomNumber(1, 290))}>
+					{'Random Maxim'}
+				</Button>
+				<Button onClick={() => nextMaxim(maxim)}>
+					<KeyboardArrowRight />
+				</Button>
 			</Grid>
 			<ShareMaxim
 				openModal={open}
