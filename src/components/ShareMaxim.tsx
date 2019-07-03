@@ -7,7 +7,6 @@ import imageSizes from '../utils/image-sizes';
 import marked from 'marked';
 import PlainTextRenderer from 'marked-plaintext';
 import FontFaceObserver from 'fontfaceobserver';
-import { runInNewContext } from 'vm';
 
 function useClientRect() {
 	const [rect, setRect] = React.useState<any>(null);
@@ -75,6 +74,8 @@ const _ShareMaxim: React.FC<IProps> = ({
 
 	function sanitiseText(maximText: string) {
 		const plainTextRenderer = new PlainTextRenderer();
+		// this is custom to not include 'whitespace' that
+		// PlainTextRenderer adds by default
 		plainTextRenderer.paragraph = (text: string) => text;
 		const newText = marked(maximText, { renderer: plainTextRenderer });
 
