@@ -7,6 +7,7 @@ import imageSizes from '../utils/image-sizes';
 import marked from 'marked';
 import PlainTextRenderer from 'marked-plaintext';
 import FontFaceObserver from 'fontfaceobserver';
+import { runInNewContext } from 'vm';
 
 function useClientRect() {
 	const [rect, setRect] = React.useState<any>(null);
@@ -74,9 +75,16 @@ const _ShareMaxim: React.FC<IProps> = ({
 
 	function sanitiseText(maximText: string) {
 		const plainTextRenderer = new PlainTextRenderer();
-		const nextText = marked(maximText, { renderer: plainTextRenderer });
+		plainTextRenderer.paragraph = (text: string) => text;
+		const newText = marked(maximText, { renderer: plainTextRenderer });
 
-		return nextText;
+		if (newText.includes('&amp;')) {
+			console.log('nextText: ', newText.replace('&amp;', '&'));
+			return newText.replace('&amp;', '&');
+		} else {
+			console.log('newText: ', newText);
+			return newText;
+		}
 	}
 
 	return (
