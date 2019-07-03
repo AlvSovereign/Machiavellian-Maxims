@@ -39,7 +39,9 @@ const QueryMaxim: React.FC<IProps> = ({ media }) => {
 	});
 	const classes = useStyles();
 
-	const [maxim, setMaxim] = React.useState<string>('');
+	const [maxim, setMaxim] = React.useState<Maxim | null>(null);
+
+	const [maximNumber, setMaximNumber] = React.useState<string>('');
 	function stringifyNumberedMaxim(maximIndex: number) {
 		let float = maximIndex;
 		let floatString;
@@ -68,18 +70,18 @@ const QueryMaxim: React.FC<IProps> = ({ media }) => {
 		return stringifyNumberedMaxim(randomNumber);
 	}
 
-	function previousMaxim(maxim: string) {
-		let numberedMaxim = parseInt(maxim, 10);
-		setMaxim(stringifyNumberedMaxim(numberedMaxim - 1));
+	function previousMaxim(maximNumber: string) {
+		let numberedMaxim = parseInt(maximNumber, 10);
+		setMaximNumber(stringifyNumberedMaxim(numberedMaxim - 1));
 	}
 
-	function nextMaxim(maxim: string) {
-		let numberedMaxim = parseInt(maxim, 10);
-		setMaxim(stringifyNumberedMaxim(numberedMaxim + 1));
+	function nextMaxim(maximNumber: string) {
+		let numberedMaxim = parseInt(maximNumber, 10);
+		setMaximNumber(stringifyNumberedMaxim(numberedMaxim + 1));
 	}
 
 	React.useEffect(() => {
-		setMaxim(getRandomNumber(1, 290));
+		setMaximNumber(getRandomNumber(1, 290));
 	}, []);
 
 	const [open, setOpen] = React.useState<boolean>(false);
@@ -92,8 +94,8 @@ const QueryMaxim: React.FC<IProps> = ({ media }) => {
 	return (
 		<>
 			<Grid item xs={10}>
-				{maxim && (
-					<Query query={GET_RANDOM_MAXIM} variables={{ index: maxim }}>
+				{maximNumber && (
+					<Query query={GET_RANDOM_MAXIM} variables={{ index: maximNumber }}>
 						{({ loading, error, data }: any) => {
 							if (loading) {
 								return (
@@ -133,6 +135,7 @@ const QueryMaxim: React.FC<IProps> = ({ media }) => {
 							if (data && !_isEmpty(data.getRandomMaxim)) {
 								const { maxim, name } = data.getRandomMaxim;
 
+								setMaxim(data.getRandomMaxim);
 								return (
 									<div>
 										<ConvertMarkdown>{name}</ConvertMarkdown>
@@ -152,24 +155,27 @@ const QueryMaxim: React.FC<IProps> = ({ media }) => {
 				direction={'row'}
 				alignItems={'center'}
 				justify={'space-around'}>
-				<Button onClick={() => previousMaxim(maxim)}>
+				<Button onClick={() => previousMaxim(maximNumber)}>
 					<KeyboardArrowLeft />
 				</Button>
 				<Button
 					variant={'contained'}
 					color={'primary'}
-					onClick={() => setMaxim(getRandomNumber(1, 290))}>
+					onClick={() => setMaximNumber(getRandomNumber(1, 290))}>
 					{'Random Maxim'}
 				</Button>
-				<Button onClick={() => nextMaxim(maxim)}>
+				<Button onClick={() => nextMaxim(maximNumber)}>
 					<KeyboardArrowRight />
 				</Button>
 			</Grid>
-			<ShareMaxim
-				openModal={open}
-				media={media}
-				closeModal={() => setOpen(false)}
-			/>
+			{maxim && maxim.name && maxim.maxim && (
+				<ShareMaxim
+					media={media}
+					maxim={maxim}
+					openModal={open}
+					closeModal={() => setOpen(false)}
+				/>
+			)}
 		</>
 	);
 };
@@ -179,3 +185,8 @@ export { QueryMaxim };
 interface IProps {
 	media: string;
 }
+
+type Maxim = {
+	name: string;
+	maxim: string;
+};

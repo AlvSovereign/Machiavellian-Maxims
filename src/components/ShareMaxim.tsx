@@ -4,6 +4,8 @@ import { Stage, Layer, Text, Group, Rect } from 'react-konva';
 import { Modal, Paper, makeStyles } from '@material-ui/core';
 import { useTheme } from '@material-ui/styles';
 import imageSizes from '../utils/image-sizes';
+import marked from 'marked';
+import PlainTextRenderer from 'marked-plaintext';
 import FontFaceObserver from 'fontfaceobserver';
 
 function useClientRect() {
@@ -19,6 +21,7 @@ function useClientRect() {
 }
 
 const _ShareMaxim: React.FC<IProps> = ({
+	maxim = null,
 	media = 'default',
 	openModal = false,
 	closeModal = () => {}
@@ -69,6 +72,13 @@ const _ShareMaxim: React.FC<IProps> = ({
 		}
 	}
 
+	function sanitiseText(maximText: string) {
+		const plainTextRenderer = new PlainTextRenderer();
+		const nextText = marked(maximText, { renderer: plainTextRenderer });
+
+		return nextText;
+	}
+
 	return (
 		<Modal open={openModal} onClose={() => closeModal()}>
 			<Paper className={classes.root}>
@@ -90,7 +100,7 @@ const _ShareMaxim: React.FC<IProps> = ({
 									fontFamily={'CalendasPlus'}
 									fontSize={34}
 									lineHeight={2}
-									text={'Maxim #122'}
+									text={sanitiseText(maxim!.name)}
 									verticalAlign={'top'}
 									width={dimensions.width / 2}
 									X={
@@ -111,7 +121,7 @@ const _ShareMaxim: React.FC<IProps> = ({
 									// fontFamily={'Times'}
 									fontFamily={'CalendasPlus'}
 									lineHeight={2}
-									text={`We’re all players in a game. You’re a player or a piece on the board, you move or you’re moved. You play the game, or the game plays you. We’re all players in a game. You’re a player or a piece on the board, you move or you’re moved. You play the game, or the game plays you.`}
+									text={sanitiseText(maxim!.maxim)}
 									verticalAlign={'middle'}
 									width={dimensions.width / 2}
 									wrap={'word'}
@@ -149,8 +159,8 @@ const _ShareMaxim: React.FC<IProps> = ({
 									ref={attributionRef}
 									align={'center'}
 									fill={'rgba(0, 0, 0, 0.87)'}
-									fontFamily={'Times'}
-									fontSize={34}
+									fontFamily={'CalendasPlus'}
+									fontSize={30}
 									lineHeight={2}
 									text={'ILLIMUTABLEMEN.COM'}
 									verticalAlign={'middle'}
@@ -179,6 +189,7 @@ const _ShareMaxim: React.FC<IProps> = ({
 export const ShareMaxim = _ShareMaxim;
 
 interface IProps {
+	maxim: Maxim;
 	media: string;
 	openModal: boolean;
 	closeModal: () => void;
@@ -187,4 +198,9 @@ interface IProps {
 type TDimensions = {
 	height: number;
 	width: number;
+};
+
+type Maxim = {
+	name: string;
+	maxim: string;
 };
