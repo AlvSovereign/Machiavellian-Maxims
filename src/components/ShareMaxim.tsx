@@ -1,7 +1,7 @@
 import React from 'react';
 import Konva from 'konva';
 import { Stage, Layer, Text, Group, Rect } from 'react-konva';
-import { Modal, Paper, makeStyles } from '@material-ui/core';
+import { Dialog, Button } from '@material-ui/core';
 import { useTheme } from '@material-ui/styles';
 import imageSizes from '../utils/image-sizes';
 import marked from 'marked';
@@ -11,12 +11,14 @@ import FontFaceObserver from 'fontfaceobserver';
 function useClientRect() {
 	const [rect, setRect] = React.useState<any>(null);
 	const [node, setNode] = React.useState<any>(null);
+
 	const ref: any = React.useCallback((node: any) => {
 		if (node !== null) {
 			setNode(node);
 			setRect(node.getClientRect());
 		}
 	}, []);
+
 	return [{ rect, node }, ref];
 }
 
@@ -34,8 +36,6 @@ const _ShareMaxim: React.FC<IProps> = ({
 	const [attributionNode, attributionRef] = useClientRect();
 	const [dividerNode, dividerRef] = useClientRect();
 	const [maximNode, maximRef] = useClientRect();
-	const [titleNode, titleRef] = useClientRect();
-	const [groupNode, groupRef] = useClientRect();
 
 	// Load our custom font first and control rendering of the canvas.
 	// This solves the issue of the canvas rendering before the custom
@@ -52,14 +52,6 @@ const _ShareMaxim: React.FC<IProps> = ({
 	React.useEffect(() => {
 		loadFont();
 	}, [fontReady]);
-
-	const useStyles = makeStyles({
-		root: {
-			height: dimensions.height,
-			width: dimensions.width
-		}
-	});
-	const classes = useStyles();
 
 	function getDimensions(media: string) {
 		switch (media) {
@@ -80,118 +72,238 @@ const _ShareMaxim: React.FC<IProps> = ({
 		const newText = marked(maximText, { renderer: plainTextRenderer });
 
 		if (newText.includes('&amp;')) {
-			console.log('nextText: ', newText.replace('&amp;', '&'));
 			return newText.replace('&amp;', '&');
 		} else {
-			console.log('newText: ', newText);
 			return newText;
 		}
 	}
 
-	return (
-		<Modal open={openModal} onClose={() => closeModal()}>
-			<Paper className={classes.root}>
-				{fontReady && (
-					<Stage height={dimensions.height} width={dimensions.width}>
-						<Layer>
-							<Rect
-								fill={'white'}
-								height={dimensions.height}
-								width={dimensions.width}
-								x={0}
-								y={0}
-							/>
-							<Group ref={groupRef} absolutePosition={{ x: 0, y: -28 }}>
-								<Text
-									ref={titleRef}
-									align={'right'}
-									fill={theme.palette.primary.main}
-									fontFamily={'CalendasPlus'}
-									fontSize={34}
-									lineHeight={2}
-									text={sanitiseText(maxim!.name)}
-									verticalAlign={'top'}
-									width={dimensions.width / 2}
-									X={
-										maximNode &&
-										maximNode.rect &&
-										dimensions.width / 2 - maximNode.rect.width / 2
-									}
-									y={
-										maximNode &&
-										maximNode.rect &&
-										dimensions.height / 2 - maximNode.rect.height / 2 - 66
-									}
-								/>
-								<Text
-									ref={maximRef}
-									align={'center'}
-									fontSize={24}
-									// fontFamily={'Times'}
-									fontFamily={'CalendasPlus'}
-									lineHeight={2}
-									text={sanitiseText(maxim!.maxim)}
-									verticalAlign={'middle'}
-									width={dimensions.width / 2}
-									wrap={'word'}
-									x={
-										maximNode &&
-										maximNode.rect &&
-										dimensions.width / 2 - maximNode.rect.width / 2
-									}
-									y={
-										maximNode &&
-										maximNode.rect &&
-										dimensions.height / 2 - maximNode.rect.height / 2
-									}
-								/>
+	const [canvasImage, setCanvasImage] = React.useState<any>(null);
+	function createCanvas() {
+		const stage = new Konva.Stage({
+			container: 'canvas-container',
+			height: dimensions.height,
+			width: dimensions.width
+		});
+		const layer = new Konva.Layer();
 
-								<Rect
-									ref={dividerRef}
-									align={'center'}
-									fill={theme.palette.primary.main}
-									height={1}
-									width={dimensions.width / 4}
-									x={
-										dividerNode &&
-										dividerNode.rect &&
-										dimensions.width / 2 - dividerNode.rect.width / 2
-									}
-									y={
-										maximNode &&
-										maximNode.rect &&
-										maximNode.node &&
-										dimensions.height / 2 + maximNode.rect.height / 2 + 28
-									}
-								/>
-								<Text
-									ref={attributionRef}
-									align={'center'}
-									fill={'rgba(0, 0, 0, 0.87)'}
-									fontFamily={'CalendasPlus'}
-									fontSize={30}
-									lineHeight={2}
-									text={'ILLIMUTABLEMEN.COM'}
-									verticalAlign={'middle'}
-									width={dimensions.width / 2}
-									x={
-										attributionNode &&
-										attributionNode.rect &&
-										dimensions.width / 2 - attributionNode.rect.width / 2
-									}
-									y={
-										maximNode &&
-										maximNode.rect &&
-										maximNode.node &&
-										dimensions.height / 2 + maximNode.rect.height / 2 + 28 + 28
-									}
-								/>
-							</Group>
-						</Layer>
-					</Stage>
-				)}
-			</Paper>
-		</Modal>
+		stage.add(layer);
+
+		const background = new Konva.Rect({
+			fill: 'white',
+			height: dimensions.height,
+			width: dimensions.width,
+			x: 0,
+			y: 0
+		});
+
+		layer.add(background);
+
+		const group = new Konva.Group({
+			absolutePosition: {
+				x: 0,
+				y: -28
+			}
+		});
+
+		layer.add(group);
+
+		const title = new Konva.Text({
+			align: 'right',
+			fill: theme.palette.primary.main,
+			fontFamily: 'CalendasPlus',
+			fontSize: 34,
+			lineHeight: 2,
+			text: sanitiseText(maxim!.name),
+			verticalAlign: 'top',
+			width: dimensions.width / 2,
+			x:
+				maximNode &&
+				maximNode.rect &&
+				dimensions.width / 2 - maximNode.rect.width / 2,
+			y:
+				maximNode &&
+				maximNode.rect &&
+				dimensions.height / 2 - maximNode.rect.height / 2 - 66
+		});
+
+		group.add(title);
+
+		const content = new Konva.Text({
+			align: 'center',
+			fontSize: 24,
+			fontFamily: 'CalendasPlus',
+			lineHeight: 2,
+			text: sanitiseText(maxim!.maxim),
+			verticalAlign: 'middle',
+			width: dimensions.width / 2,
+			wrap: 'word',
+			x:
+				maximNode &&
+				maximNode.rect &&
+				dimensions.width / 2 - maximNode.rect.width / 2,
+			y:
+				maximNode &&
+				maximNode.rect &&
+				dimensions.height / 2 - maximNode.rect.height / 2
+		});
+
+		group.add(content);
+
+		const hr = new Konva.Rect({
+			align: 'center',
+			fill: theme.palette.primary.main,
+			height: 1,
+			width: dimensions.width / 4,
+			x:
+				dividerNode &&
+				dividerNode.rect &&
+				dimensions.width / 2 - dividerNode.rect.width / 2,
+			y:
+				maximNode &&
+				maximNode.rect &&
+				maximNode.node &&
+				dimensions.height / 2 + maximNode.rect.height / 2 + 28
+		});
+
+		group.add(hr);
+
+		const tagline = new Konva.Text({
+			align: 'center',
+			fill: 'rgba(0, 0, 0, 0.54',
+			fontFamily: 'CalendasPlus',
+			fontSize: 30,
+			lineHeight: 2,
+			text: 'ILLIMUTABLEMEN.COM',
+			verticalAlign: 'middle',
+			width: dimensions.width / 2,
+			x:
+				attributionNode &&
+				attributionNode.rect &&
+				dimensions.width / 2 - attributionNode.rect.width / 2,
+			y:
+				maximNode &&
+				maximNode.rect &&
+				maximNode.node &&
+				dimensions.height / 2 + maximNode.rect.height / 2 + 28 + 28
+		});
+
+		group.add(tagline);
+
+		setCanvasImage(stage.toDataURL({ pixelRatio: 4 }));
+	}
+
+	return (
+		<Dialog
+			fullWidth
+			maxWidth={'xl'}
+			open={openModal}
+			onClose={() => closeModal()}>
+			{fontReady && (
+				<Stage height={dimensions.height} width={dimensions.width}>
+					<Layer>
+						<Rect
+							fill={'white'}
+							height={dimensions.height}
+							width={dimensions.width}
+							x={0}
+							y={0}
+						/>
+						<Group absolutePosition={{ x: 0, y: -28 }}>
+							<Text
+								align={'right'}
+								fill={theme.palette.primary.main}
+								fontFamily={'CalendasPlus'}
+								fontSize={34}
+								lineHeight={2}
+								text={sanitiseText(maxim!.name)}
+								verticalAlign={'top'}
+								width={dimensions.width / 2}
+								X={
+									maximNode &&
+									maximNode.rect &&
+									dimensions.width / 2 - maximNode.rect.width / 2
+								}
+								y={
+									maximNode &&
+									maximNode.rect &&
+									dimensions.height / 2 - maximNode.rect.height / 2 - 66
+								}
+							/>
+							<Text
+								ref={maximRef}
+								align={'center'}
+								fontSize={24}
+								fontFamily={'CalendasPlus'}
+								lineHeight={2}
+								text={sanitiseText(maxim!.maxim)}
+								verticalAlign={'middle'}
+								width={dimensions.width / 2}
+								wrap={'word'}
+								x={
+									maximNode &&
+									maximNode.rect &&
+									dimensions.width / 2 - maximNode.rect.width / 2
+								}
+								y={
+									maximNode &&
+									maximNode.rect &&
+									dimensions.height / 2 - maximNode.rect.height / 2
+								}
+							/>
+							<Rect
+								ref={dividerRef}
+								align={'center'}
+								fill={theme.palette.primary.main}
+								height={1}
+								width={dimensions.width / 4}
+								x={
+									dividerNode &&
+									dividerNode.rect &&
+									dimensions.width / 2 - dividerNode.rect.width / 2
+								}
+								y={
+									maximNode &&
+									maximNode.rect &&
+									maximNode.node &&
+									dimensions.height / 2 + maximNode.rect.height / 2 + 28
+								}
+							/>
+							<Text
+								ref={attributionRef}
+								align={'center'}
+								fill={'rgba(0, 0, 0, 0.54)'}
+								fontFamily={'CalendasPlus'}
+								fontSize={30}
+								lineHeight={2}
+								text={'ILLIMUTABLEMEN.COM'}
+								verticalAlign={'middle'}
+								width={dimensions.width / 2}
+								x={
+									attributionNode &&
+									attributionNode.rect &&
+									dimensions.width / 2 - attributionNode.rect.width / 2
+								}
+								y={
+									maximNode &&
+									maximNode.rect &&
+									maximNode.node &&
+									dimensions.height / 2 + maximNode.rect.height / 2 + 28 + 28
+								}
+							/>
+						</Group>
+					</Layer>
+				</Stage>
+			)}
+			<img id='canvas-container' src={canvasImage} />
+			<Button
+				component={'a'}
+				href={canvasImage}
+				onClick={createCanvas}
+				download>
+				Canvas
+			</Button>
+		</Dialog>
 	);
 };
 
