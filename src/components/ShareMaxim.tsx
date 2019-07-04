@@ -1,26 +1,11 @@
 import React from 'react';
 import Konva from 'konva';
-import { Stage, Layer, Text, Group, Rect } from 'react-konva';
 import { Dialog, Button } from '@material-ui/core';
 import { useTheme } from '@material-ui/styles';
 import imageSizes from '../utils/image-sizes';
 import marked from 'marked';
 import PlainTextRenderer from 'marked-plaintext';
 import FontFaceObserver from 'fontfaceobserver';
-
-function useClientRect() {
-	const [rect, setRect] = React.useState<any>(null);
-	const [node, setNode] = React.useState<any>(null);
-
-	const ref: any = React.useCallback((node: any) => {
-		if (node !== null) {
-			setNode(node);
-			setRect(node.getClientRect());
-		}
-	}, []);
-
-	return [{ rect, node }, ref];
-}
 
 const _ShareMaxim: React.FC<IProps> = ({
 	maxim = null,
@@ -33,9 +18,6 @@ const _ShareMaxim: React.FC<IProps> = ({
 		width: 1080
 	});
 	const theme: any = useTheme();
-	const [attributionNode, attributionRef] = useClientRect();
-	const [dividerNode, dividerRef] = useClientRect();
-	const [maximNode, maximRef] = useClientRect();
 
 	// Load our custom font first and control rendering of the canvas.
 	// This solves the issue of the canvas rendering before the custom
@@ -108,6 +90,25 @@ const _ShareMaxim: React.FC<IProps> = ({
 
 		layer.add(group);
 
+		const content = new Konva.Text({
+			align: 'center',
+			fontSize: 24,
+			fontFamily: 'CalendasPlus',
+			lineHeight: 2,
+			text: sanitiseText(maxim!.maxim),
+			verticalAlign: 'middle',
+			width: dimensions.width / 2,
+			wrap: 'word'
+		});
+
+		const contentRect: ClientRect = content.getClientRect(null);
+		content.x(dimensions.width / 2 - contentRect.width / 2);
+		content.y(dimensions.height / 2 - contentRect.height / 2);
+		const updatedContentRect: ClientRect = content.getClientRect(null);
+		console.log('updatedContentRect: ', updatedContentRect);
+
+		group.add(content);
+
 		const title = new Konva.Text({
 			align: 'right',
 			fill: theme.palette.primary.main,
@@ -117,54 +118,22 @@ const _ShareMaxim: React.FC<IProps> = ({
 			text: sanitiseText(maxim!.name),
 			verticalAlign: 'top',
 			width: dimensions.width / 2,
-			x:
-				maximNode &&
-				maximNode.rect &&
-				dimensions.width / 2 - maximNode.rect.width / 2,
-			y:
-				maximNode &&
-				maximNode.rect &&
-				dimensions.height / 2 - maximNode.rect.height / 2 - 66
+			x: dimensions.width / 2 - contentRect.width / 2,
+			y: updatedContentRect.y - 33
 		});
 
 		group.add(title);
-
-		const content = new Konva.Text({
-			align: 'center',
-			fontSize: 24,
-			fontFamily: 'CalendasPlus',
-			lineHeight: 2,
-			text: sanitiseText(maxim!.maxim),
-			verticalAlign: 'middle',
-			width: dimensions.width / 2,
-			wrap: 'word',
-			x:
-				maximNode &&
-				maximNode.rect &&
-				dimensions.width / 2 - maximNode.rect.width / 2,
-			y:
-				maximNode &&
-				maximNode.rect &&
-				dimensions.height / 2 - maximNode.rect.height / 2
-		});
-
-		group.add(content);
 
 		const hr = new Konva.Rect({
 			align: 'center',
 			fill: theme.palette.primary.main,
 			height: 1,
 			width: dimensions.width / 4,
-			x:
-				dividerNode &&
-				dividerNode.rect &&
-				dimensions.width / 2 - dividerNode.rect.width / 2,
-			y:
-				maximNode &&
-				maximNode.rect &&
-				maximNode.node &&
-				dimensions.height / 2 + maximNode.rect.height / 2 + 28
+			y: updatedContentRect.y + updatedContentRect.height + 56
 		});
+		const hrRect = hr.getClientRect(null);
+
+		hr.x(dimensions.width / 2 - hrRect.width / 2);
 
 		group.add(hr);
 
@@ -177,16 +146,11 @@ const _ShareMaxim: React.FC<IProps> = ({
 			text: 'ILLIMUTABLEMEN.COM',
 			verticalAlign: 'middle',
 			width: dimensions.width / 2,
-			x:
-				attributionNode &&
-				attributionNode.rect &&
-				dimensions.width / 2 - attributionNode.rect.width / 2,
-			y:
-				maximNode &&
-				maximNode.rect &&
-				maximNode.node &&
-				dimensions.height / 2 + maximNode.rect.height / 2 + 28 + 28
+			y: hrRect.y + 28
 		});
+		const taglineRect = tagline.getClientRect(null);
+
+		tagline.x(dimensions.width / 2 - taglineRect.width / 2);
 
 		group.add(tagline);
 
@@ -199,104 +163,9 @@ const _ShareMaxim: React.FC<IProps> = ({
 			maxWidth={'xl'}
 			open={openModal}
 			onClose={() => closeModal()}>
-			{fontReady && (
-				<Stage height={dimensions.height} width={dimensions.width}>
-					<Layer>
-						<Rect
-							fill={'white'}
-							height={dimensions.height}
-							width={dimensions.width}
-							x={0}
-							y={0}
-						/>
-						<Group absolutePosition={{ x: 0, y: -28 }}>
-							<Text
-								align={'right'}
-								fill={theme.palette.primary.main}
-								fontFamily={'CalendasPlus'}
-								fontSize={34}
-								lineHeight={2}
-								text={sanitiseText(maxim!.name)}
-								verticalAlign={'top'}
-								width={dimensions.width / 2}
-								X={
-									maximNode &&
-									maximNode.rect &&
-									dimensions.width / 2 - maximNode.rect.width / 2
-								}
-								y={
-									maximNode &&
-									maximNode.rect &&
-									dimensions.height / 2 - maximNode.rect.height / 2 - 66
-								}
-							/>
-							<Text
-								ref={maximRef}
-								align={'center'}
-								fontSize={24}
-								fontFamily={'CalendasPlus'}
-								lineHeight={2}
-								text={sanitiseText(maxim!.maxim)}
-								verticalAlign={'middle'}
-								width={dimensions.width / 2}
-								wrap={'word'}
-								x={
-									maximNode &&
-									maximNode.rect &&
-									dimensions.width / 2 - maximNode.rect.width / 2
-								}
-								y={
-									maximNode &&
-									maximNode.rect &&
-									dimensions.height / 2 - maximNode.rect.height / 2
-								}
-							/>
-							<Rect
-								ref={dividerRef}
-								align={'center'}
-								fill={theme.palette.primary.main}
-								height={1}
-								width={dimensions.width / 4}
-								x={
-									dividerNode &&
-									dividerNode.rect &&
-									dimensions.width / 2 - dividerNode.rect.width / 2
-								}
-								y={
-									maximNode &&
-									maximNode.rect &&
-									maximNode.node &&
-									dimensions.height / 2 + maximNode.rect.height / 2 + 28
-								}
-							/>
-							<Text
-								ref={attributionRef}
-								align={'center'}
-								fill={'rgba(0, 0, 0, 0.54)'}
-								fontFamily={'CalendasPlus'}
-								fontSize={30}
-								lineHeight={2}
-								text={'ILLIMUTABLEMEN.COM'}
-								verticalAlign={'middle'}
-								width={dimensions.width / 2}
-								x={
-									attributionNode &&
-									attributionNode.rect &&
-									dimensions.width / 2 - attributionNode.rect.width / 2
-								}
-								y={
-									maximNode &&
-									maximNode.rect &&
-									maximNode.node &&
-									dimensions.height / 2 + maximNode.rect.height / 2 + 28 + 28
-								}
-							/>
-						</Group>
-					</Layer>
-				</Stage>
-			)}
 			<img id='canvas-container' src={canvasImage} />
 			<Button
+				color={'primary'}
 				component={'a'}
 				href={canvasImage}
 				onClick={createCanvas}
@@ -324,4 +193,11 @@ type TDimensions = {
 type Maxim = {
 	name: string;
 	maxim: string;
+};
+
+type ClientRect = {
+	x: number;
+	y: number;
+	height: number;
+	width: number;
 };
