@@ -1,7 +1,17 @@
 import React from 'react';
 import Konva from 'konva';
-import { Dialog, Button } from '@material-ui/core';
-import { useTheme } from '@material-ui/styles';
+import {
+	Dialog,
+	Button,
+	DialogTitle,
+	DialogContent,
+	DialogActions,
+	FormControl,
+	RadioGroup,
+	FormControlLabel,
+	Radio
+} from '@material-ui/core';
+import { useTheme, makeStyles } from '@material-ui/styles';
 import imageSizes from '../utils/image-sizes';
 import marked from 'marked';
 import PlainTextRenderer from 'marked-plaintext';
@@ -13,11 +23,17 @@ const _ShareMaxim: React.FC<IProps> = ({
 	openModal = false,
 	closeModal = () => {}
 }) => {
-	const [dimensions, setDimensions] = React.useState<TDimensions>({
-		height: 1080,
-		width: 1080
-	});
+	const [dimensions, setDimensions] = React.useState<TDimensions | null>(null);
 	const theme: any = useTheme();
+	const useStyles = makeStyles({
+		formControl: {
+			margin: theme.spacing(3)
+		},
+		group: {
+			margin: theme.spacing(1, 0)
+		}
+	});
+	const classes = useStyles();
 
 	// Load our custom font first and control rendering of the canvas.
 	// This solves the issue of the canvas rendering before the custom
@@ -35,17 +51,6 @@ const _ShareMaxim: React.FC<IProps> = ({
 		loadFont();
 	}, [fontReady]);
 
-	function getDimensions(media: string) {
-		switch (media) {
-			case 'InstagramFeed':
-				setDimensions(imageSizes.instagramFeedPortrait);
-				break;
-			default:
-				setDimensions(imageSizes.default);
-				break;
-		}
-	}
-
 	function sanitiseText(maximText: string) {
 		const plainTextRenderer = new PlainTextRenderer();
 		// this is custom to not include 'whitespace' that
@@ -62,6 +67,9 @@ const _ShareMaxim: React.FC<IProps> = ({
 
 	const [canvasImage, setCanvasImage] = React.useState<any>(null);
 	function createCanvas() {
+		if (!dimensions) {
+			return;
+		}
 		const stage = new Konva.Stage({
 			container: 'canvas-container',
 			height: dimensions.height,
@@ -105,7 +113,6 @@ const _ShareMaxim: React.FC<IProps> = ({
 		content.x(dimensions.width / 2 - contentRect.width / 2);
 		content.y(dimensions.height / 2 - contentRect.height / 2);
 		const updatedContentRect: ClientRect = content.getClientRect(null);
-		console.log('updatedContentRect: ', updatedContentRect);
 
 		group.add(content);
 
@@ -157,21 +164,63 @@ const _ShareMaxim: React.FC<IProps> = ({
 		setCanvasImage(stage.toDataURL({ pixelRatio: 4 }));
 	}
 
+	function handleChange(event: React.ChangeEvent<unknown>) {
+		event.persist();
+		const sizeOption: SizeOption | undefined = imageSizes.find(
+			size => size.id === (event.target as HTMLInputElement).value
+		);
+		if (!sizeOption) {
+			return;
+		}
+
+		const { height, width } = sizeOption;
+
+		setDimensions({ height, width });
+	}
+
+	React.useEffect(() => {
+		createCanvas();
+	}, [dimensions]);
+
 	return (
-		<Dialog
-			fullWidth
-			maxWidth={'xl'}
-			open={openModal}
-			onClose={() => closeModal()}>
-			<img id='canvas-container' src={canvasImage} />
-			<Button
-				color={'primary'}
-				component={'a'}
-				href={canvasImage}
-				onClick={createCanvas}
-				download>
-				Canvas
-			</Button>
+		<Dialog fullWidth open={openModal} onClose={() => closeModal()}>
+			<DialogTitle id='alert-dialog-title'>
+				{'Choose your social media image'}
+			</DialogTitle>
+			<DialogContent dividers>
+				<FormControl component='fieldset' className={classes.formControl}>
+					<RadioGroup
+						aria-label='Social Media Selection'
+						name='selection'
+						className={classes.group}
+						value={'square'}
+						onChange={handleChange}>
+						{imageSizes.map(size => (
+							<FormControlLabel
+								key={size.id}
+								label={size.label}
+								value={size.id}
+								control={<Radio />}
+							/>
+						))}
+					</RadioGroup>
+				</FormControl>
+			</DialogContent>
+			<DialogActions>
+				<Button
+					disabled={!canvasImage}
+					color={'primary'}
+					component={'a'}
+					href={canvasImage}
+					download>
+					Download
+				</Button>
+			</DialogActions>
+			<img
+				id='canvas-container'
+				src={canvasImage}
+				style={{ display: 'none' }}
+			/>
 		</Dialog>
 	);
 };
@@ -201,3 +250,10 @@ type ClientRect = {
 	height: number;
 	width: number;
 };
+
+interface SizeOption {
+	id: string;
+	label: string;
+	height: number;
+	width: number;
+}
