@@ -19,7 +19,6 @@ import FontFaceObserver from 'fontfaceobserver';
 
 const _ShareMaxim: React.FC<IProps> = ({
 	maxim = null,
-	media = 'default',
 	openModal = false,
 	closeModal = () => {}
 }) => {
@@ -162,8 +161,13 @@ const _ShareMaxim: React.FC<IProps> = ({
 		group.add(tagline);
 
 		setCanvasImage(stage.toDataURL({ pixelRatio: 4 }));
+
+		return () => {
+			stage.destroy();
+		};
 	}
 
+	const [size, setSize] = React.useState<string | undefined>(undefined);
 	function handleChange(event: React.ChangeEvent<unknown>) {
 		event.persist();
 		const sizeOption: SizeOption | undefined = imageSizes.find(
@@ -172,7 +176,7 @@ const _ShareMaxim: React.FC<IProps> = ({
 		if (!sizeOption) {
 			return;
 		}
-
+		setSize(sizeOption.id);
 		const { height, width } = sizeOption;
 
 		setDimensions({ height, width });
@@ -182,8 +186,13 @@ const _ShareMaxim: React.FC<IProps> = ({
 		createCanvas();
 	}, [dimensions]);
 
+	function handleClose() {
+		setCanvasImage(null);
+		closeModal();
+	}
+
 	return (
-		<Dialog fullWidth open={openModal} onClose={() => closeModal()}>
+		<Dialog fullWidth open={openModal} onClose={handleClose}>
 			<DialogTitle id='alert-dialog-title'>
 				{'Choose your social media image'}
 			</DialogTitle>
@@ -193,7 +202,7 @@ const _ShareMaxim: React.FC<IProps> = ({
 						aria-label='Social Media Selection'
 						name='selection'
 						className={classes.group}
-						value={'square'}
+						value={size}
 						onChange={handleChange}>
 						{imageSizes.map(size => (
 							<FormControlLabel
@@ -229,7 +238,6 @@ export const ShareMaxim = _ShareMaxim;
 
 interface IProps {
 	maxim: Maxim;
-	media: string;
 	openModal: boolean;
 	closeModal: () => void;
 }

@@ -4,10 +4,15 @@ import {
 	Button,
 	Divider,
 	CircularProgress,
-	Typography
+	Typography,
+	Fab
 } from '@material-ui/core';
 import { makeStyles, useTheme } from '@material-ui/styles';
-import { KeyboardArrowLeft, KeyboardArrowRight } from '@material-ui/icons';
+import {
+	KeyboardArrowLeft,
+	KeyboardArrowRight,
+	Share
+} from '@material-ui/icons';
 import ConvertMarkdown from './Markdown';
 import gql from 'graphql-tag';
 import { getRandomMaxim } from '../graphql/queries';
@@ -16,7 +21,7 @@ import { isEmpty as _isEmpty } from 'lodash-es';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { ShareMaxim } from './ShareMaxim';
 
-const QueryMaxim: React.FC<IProps> = ({ media }) => {
+const QueryMaxim: React.FC = () => {
 	const theme: any = useTheme();
 	const mobile = useMediaQuery(theme.breakpoints.down('sm'));
 	const useStyles = makeStyles({
@@ -84,10 +89,7 @@ const QueryMaxim: React.FC<IProps> = ({ media }) => {
 		setMaximNumber(getRandomNumber(1, 290));
 	}, []);
 
-	const [open, setOpen] = React.useState<boolean>(false);
-	React.useEffect(() => {
-		setOpen(true);
-	}, [media]);
+	const [showModal, setShowModal] = React.useState<boolean>(false);
 
 	const GET_RANDOM_MAXIM = gql(getRandomMaxim);
 
@@ -170,21 +172,23 @@ const QueryMaxim: React.FC<IProps> = ({ media }) => {
 			</Grid>
 			{maxim && maxim.name && maxim.maxim && (
 				<ShareMaxim
-					media={media}
 					maxim={maxim}
-					openModal={open}
-					closeModal={() => setOpen(false)}
+					openModal={showModal}
+					closeModal={() => setShowModal(false)}
 				/>
 			)}
+			<Fab
+				color='primary'
+				aria-label='Add'
+				className={classes.fab}
+				onClick={() => setShowModal(true)}>
+				<Share />
+			</Fab>
 		</>
 	);
 };
 
 export { QueryMaxim };
-
-interface IProps {
-	media: string;
-}
 
 type Maxim = {
 	name: string;

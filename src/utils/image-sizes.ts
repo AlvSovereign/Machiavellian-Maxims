@@ -1,6 +1,6 @@
 const imageSizes: SizeOption[] = [
 	{
-		id: 'Square',
+		id: 'square',
 		label: 'Square',
 		height: 1080,
 		width: 1080
