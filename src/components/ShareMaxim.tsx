@@ -9,7 +9,8 @@ import {
 	FormControl,
 	RadioGroup,
 	FormControlLabel,
-	Radio
+	Radio,
+	CircularProgress
 } from '@material-ui/core';
 import { useTheme, makeStyles } from '@material-ui/styles';
 import imageSizes from '../utils/image-sizes';
@@ -161,15 +162,18 @@ const _ShareMaxim: React.FC<IProps> = ({
 		group.add(tagline);
 
 		setCanvasImage(stage.toDataURL({ pixelRatio: 4 }));
+		setLoadingCanvas(false);
 
 		return () => {
 			stage.destroy();
 		};
 	}
 
-	const [size, setSize] = React.useState<string | undefined>(undefined);
+	const [size, setSize] = React.useState<string>('default');
+	const [loadingCanvas, setLoadingCanvas] = React.useState<boolean>(false);
 	function handleChange(event: React.ChangeEvent<unknown>) {
 		event.persist();
+		setLoadingCanvas(true);
 		const sizeOption: SizeOption | undefined = imageSizes.find(
 			size => size.id === (event.target as HTMLInputElement).value
 		);
@@ -188,6 +192,7 @@ const _ShareMaxim: React.FC<IProps> = ({
 
 	function handleClose() {
 		setCanvasImage(null);
+		setSize('default');
 		closeModal();
 	}
 
@@ -216,14 +221,18 @@ const _ShareMaxim: React.FC<IProps> = ({
 				</FormControl>
 			</DialogContent>
 			<DialogActions>
-				<Button
-					disabled={!canvasImage}
-					color={'primary'}
-					component={'a'}
-					href={canvasImage}
-					download>
-					Download
-				</Button>
+				{loadingCanvas ? (
+					<CircularProgress />
+				) : (
+					<Button
+						disabled={!canvasImage}
+						color={'primary'}
+						component={'a'}
+						href={canvasImage}
+						download>
+						Download
+					</Button>
+				)}
 			</DialogActions>
 			<img
 				id='canvas-container'
