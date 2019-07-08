@@ -116,6 +116,18 @@ const _ShareMaxim: React.FC<IProps> = ({
 
 		group.add(content);
 
+		const quote = new Konva.Text({
+			fill: theme.palette.primary.main,
+			fontFamily: 'CalendasPlus',
+			fontSize: 224,
+			opacity: 0.2,
+			text: '“',
+			x: updatedContentRect.x,
+			y: updatedContentRect.y,
+			zIndex: 0
+		});
+		group.add(quote);
+
 		const title = new Konva.Text({
 			align: 'right',
 			fill: theme.palette.primary.main,
