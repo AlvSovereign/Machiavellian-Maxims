@@ -24,7 +24,7 @@
 		"konva": "^3.3.3",
 		"lodash-es": "^4.17.11",
 		"markdown-to-jsx": "^6.9.4",
-		"marked": "^0.6.3",
+		"marked": "^0.7.0",
 		"marked-plaintext": "^0.0.2",
 		"npm": "^6.9.0",
 		"react": "^16.8.6",
