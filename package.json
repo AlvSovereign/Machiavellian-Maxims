@@ -16,7 +16,7 @@
 		"aws-amplify-react": "^2.3.8",
 		"aws-appsync": "^1.8.0",
 		"aws-appsync-react": "^1.2.8",
-		"axios": "@^0.19.0",
+		"axios": "@^0.21.1",
 		"fontfaceobserver": "^2.1.0",
 		"graphql": "^14.3.0",
 		"graphql-tag": "^2.10.1",
